@@ -39,6 +39,8 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // listBox1
@@ -136,11 +138,28 @@
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 10;
             // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(42, 209);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(61, 56);
+            this.treeView1.TabIndex = 11;
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(456, 53);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(82, 34);
+            this.checkedListBox1.TabIndex = 12;
+            // 
             // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(623, 353);
+            this.Controls.Add(this.checkedListBox1);
+            this.Controls.Add(this.treeView1);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.checkBox1);
@@ -172,6 +191,8 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.MonthCalendar monthCalendar1;
+        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }
 
