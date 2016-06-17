@@ -1,0 +1,13 @@
+Terminology
+
+"Master": Sorce code, that is concidered to be the final version of the project. 
+          The Master can not be rolled back to a previous state.
+        
+"Branch": Source code, that is not concidered to be the final version (code under development). 
+          A branch does not effect the Master until it is "Merged" with the master, and so, code 
+          can be developed without any risk of corrupting or ruining the Master. A branch can 
+          be rolled back, discontinued, and/or be discarded if nessesary. If however a branch is 
+          concidered ok, it can be merged with the master, and so be included/merged into the 
+          final version of the project. 
+          
+          
