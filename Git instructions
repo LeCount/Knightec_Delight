@@ -1,0 +1,36 @@
+*******************
+******* Git ******* 
+*******************
+
+-Terminology
+
+
+"Master": Source code, that is considered to be the final version of the project. 
+          The Master can not be rolled back to a previous state.
+        
+"Branch": Source code, that is not considered to be the final version (code under development). 
+          A branch does not effect the Master until it is "Merged" with the master, and so, code 
+          can be developed without any risk of corrupting or ruining the Master. A branch can 
+          be rolled back, discontinued, and/or be discarded if necessary. If however a branch is 
+          considered ok, it can be merged with the master, and so be included/merged into the 
+          final version of the project. 
+
+
+
+-Some actions
+
+
+“Commit”: Update local repository.
+
+“Push”:   Update remote repository with updates from local repository (in this case, the Githubnrepository).
+
+“Fetch”:  Only downloads new data from a remote repository - but it doesn't integrate any of this new data 
+          into your working files. Fetch is great for getting a fresh view on all the things
+          that happened in a remote repository. Due to it's "harmless" nature, you can rest assured:
+          fetch will never manipulate, destroy, or screw up anything.
+
+“Pull”:   Updates your current HEAD branch with the latest changes from the remote server. This means 
+          that pull not only downloads new data; it also directly integrates it into your current 
+          working copy files.
+          
+          
