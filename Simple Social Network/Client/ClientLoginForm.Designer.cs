@@ -143,6 +143,8 @@
             this.Controls.Add(this.lbl_ip_addr);
             this.Controls.Add(this.lbl_network);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ClientLoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User log in";
