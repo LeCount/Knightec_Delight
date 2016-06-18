@@ -93,7 +93,6 @@
             this.lbl_surname.Size = new System.Drawing.Size(49, 13);
             this.lbl_surname.TabIndex = 2;
             this.lbl_surname.Text = "Surname";
-            this.lbl_surname.Click += new System.EventHandler(this.label3_Click);
             // 
             // lbl_mail
             // 
@@ -106,7 +105,6 @@
             this.lbl_mail.Size = new System.Drawing.Size(26, 13);
             this.lbl_mail.TabIndex = 3;
             this.lbl_mail.Text = "Mail";
-            this.lbl_mail.Click += new System.EventHandler(this.label4_Click);
             // 
             // textBox_username
             // 
@@ -179,7 +177,6 @@
             this.lbl_password.Size = new System.Drawing.Size(53, 13);
             this.lbl_password.TabIndex = 9;
             this.lbl_password.Text = "Password";
-            this.lbl_password.Click += new System.EventHandler(this.label6_Click);
             // 
             // groupBox1
             // 
@@ -198,7 +195,6 @@
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Login information";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // lbl_validate_password
             // 
@@ -320,7 +316,6 @@
             this.lbl_phone.Size = new System.Drawing.Size(38, 13);
             this.lbl_phone.TabIndex = 8;
             this.lbl_phone.Text = "Phone";
-            this.lbl_phone.Click += new System.EventHandler(this.label11_Click);
             // 
             // textBox_phone
             // 
@@ -340,7 +335,6 @@
             this.btn_submit.TabIndex = 14;
             this.btn_submit.Text = "Submit";
             this.btn_submit.UseVisualStyleBackColor = false;
-            this.btn_submit.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox_city
             // 
