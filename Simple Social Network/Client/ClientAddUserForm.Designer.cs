@@ -28,114 +28,115 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.lbl_username = new System.Windows.Forms.Label();
+            this.lbl_name = new System.Windows.Forms.Label();
+            this.lbl_surname = new System.Windows.Forms.Label();
+            this.lbl_mail = new System.Windows.Forms.Label();
+            this.textBox_username = new System.Windows.Forms.TextBox();
+            this.textBox_name = new System.Windows.Forms.TextBox();
+            this.textBox_surname = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lbl_validate_username = new System.Windows.Forms.Label();
+            this.textBox_password = new System.Windows.Forms.TextBox();
+            this.lbl_password = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lbl_validate_password = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lbl_city = new System.Windows.Forms.Label();
+            this.textBox_zipcode = new System.Windows.Forms.TextBox();
+            this.lbl_zipcode = new System.Windows.Forms.Label();
+            this.textBox_address = new System.Windows.Forms.TextBox();
+            this.lbl_address = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.textBox_mail = new System.Windows.Forms.TextBox();
+            this.lbl_phone = new System.Windows.Forms.Label();
+            this.textBox_phone = new System.Windows.Forms.TextBox();
+            this.btn_submit = new System.Windows.Forms.Button();
+            this.textBox_city = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // lbl_username
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_username.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 47);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Username";
+            this.lbl_username.AutoSize = true;
+            this.lbl_username.Location = new System.Drawing.Point(6, 47);
+            this.lbl_username.Name = "lbl_username";
+            this.lbl_username.Size = new System.Drawing.Size(55, 13);
+            this.lbl_username.TabIndex = 0;
+            this.lbl_username.Text = "Username";
             // 
-            // label2
+            // lbl_name
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 47);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Name";
+            this.lbl_name.AutoSize = true;
+            this.lbl_name.Location = new System.Drawing.Point(6, 47);
+            this.lbl_name.Name = "lbl_name";
+            this.lbl_name.Size = new System.Drawing.Size(35, 13);
+            this.lbl_name.TabIndex = 1;
+            this.lbl_name.Text = "Name";
             // 
-            // label3
+            // lbl_surname
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_surname.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 73);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Surname";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.lbl_surname.AutoSize = true;
+            this.lbl_surname.Location = new System.Drawing.Point(6, 73);
+            this.lbl_surname.Name = "lbl_surname";
+            this.lbl_surname.Size = new System.Drawing.Size(49, 13);
+            this.lbl_surname.TabIndex = 2;
+            this.lbl_surname.Text = "Surname";
+            this.lbl_surname.Click += new System.EventHandler(this.label3_Click);
             // 
-            // label4
+            // lbl_mail
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_mail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 67);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(26, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Mail";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.lbl_mail.AutoSize = true;
+            this.lbl_mail.Location = new System.Drawing.Point(6, 67);
+            this.lbl_mail.Name = "lbl_mail";
+            this.lbl_mail.Size = new System.Drawing.Size(26, 13);
+            this.lbl_mail.TabIndex = 3;
+            this.lbl_mail.Text = "Mail";
+            this.lbl_mail.Click += new System.EventHandler(this.label4_Click);
             // 
-            // textBox1
+            // textBox_username
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_username.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(67, 44);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(157, 20);
-            this.textBox1.TabIndex = 4;
+            this.textBox_username.Location = new System.Drawing.Point(67, 44);
+            this.textBox_username.Name = "textBox_username";
+            this.textBox_username.Size = new System.Drawing.Size(157, 20);
+            this.textBox_username.TabIndex = 4;
             // 
-            // textBox2
+            // textBox_name
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(67, 44);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(157, 20);
-            this.textBox2.TabIndex = 5;
+            this.textBox_name.Location = new System.Drawing.Point(67, 44);
+            this.textBox_name.Name = "textBox_name";
+            this.textBox_name.Size = new System.Drawing.Size(157, 20);
+            this.textBox_name.TabIndex = 5;
             // 
-            // textBox3
+            // textBox_surname
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_surname.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(67, 70);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(157, 20);
-            this.textBox3.TabIndex = 6;
+            this.textBox_surname.Location = new System.Drawing.Point(67, 70);
+            this.textBox_surname.Name = "textBox_surname";
+            this.textBox_surname.Size = new System.Drawing.Size(157, 20);
+            this.textBox_surname.TabIndex = 6;
             // 
             // textBox4
             // 
@@ -147,49 +148,50 @@
             this.textBox4.Size = new System.Drawing.Size(0, 20);
             this.textBox4.TabIndex = 7;
             // 
-            // label5
+            // lbl_validate_username
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(230, 47);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(54, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "ok/not ok";
+            this.lbl_validate_username.AutoSize = true;
+            this.lbl_validate_username.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lbl_validate_username.Location = new System.Drawing.Point(230, 47);
+            this.lbl_validate_username.Name = "lbl_validate_username";
+            this.lbl_validate_username.Size = new System.Drawing.Size(54, 13);
+            this.lbl_validate_username.TabIndex = 8;
+            this.lbl_validate_username.Text = "ok/not ok";
             // 
-            // textBox5
+            // textBox_password
             // 
-            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_password.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox5.Location = new System.Drawing.Point(67, 70);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(157, 20);
-            this.textBox5.TabIndex = 10;
+            this.textBox_password.Location = new System.Drawing.Point(67, 70);
+            this.textBox_password.Name = "textBox_password";
+            this.textBox_password.Size = new System.Drawing.Size(157, 20);
+            this.textBox_password.TabIndex = 10;
             // 
-            // label6
+            // lbl_password
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_password.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 73);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "Password";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
+            this.lbl_password.AutoSize = true;
+            this.lbl_password.Location = new System.Drawing.Point(6, 73);
+            this.lbl_password.Name = "lbl_password";
+            this.lbl_password.Size = new System.Drawing.Size(53, 13);
+            this.lbl_password.TabIndex = 9;
+            this.lbl_password.Text = "Password";
+            this.lbl_password.Click += new System.EventHandler(this.label6_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.textBox5);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.lbl_validate_password);
+            this.groupBox1.Controls.Add(this.textBox_username);
+            this.groupBox1.Controls.Add(this.textBox_password);
+            this.groupBox1.Controls.Add(this.lbl_username);
+            this.groupBox1.Controls.Add(this.lbl_password);
+            this.groupBox1.Controls.Add(this.lbl_validate_username);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(590, 105);
@@ -198,26 +200,28 @@
             this.groupBox1.Text = "Login information";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // label7
+            // lbl_validate_password
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(230, 73);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(54, 13);
-            this.label7.TabIndex = 11;
-            this.label7.Text = "ok/not ok";
+            this.lbl_validate_password.AutoSize = true;
+            this.lbl_validate_password.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lbl_validate_password.Location = new System.Drawing.Point(230, 73);
+            this.lbl_validate_password.Name = "lbl_validate_password";
+            this.lbl_validate_password.Size = new System.Drawing.Size(54, 13);
+            this.lbl_validate_password.TabIndex = 11;
+            this.lbl_validate_password.Text = "ok/not ok";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.textBox7);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.textBox6);
-            this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.textBox2);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.textBox3);
+            this.groupBox2.Controls.Add(this.textBox_city);
+            this.groupBox2.Controls.Add(this.lbl_city);
+            this.groupBox2.Controls.Add(this.textBox_zipcode);
+            this.groupBox2.Controls.Add(this.lbl_zipcode);
+            this.groupBox2.Controls.Add(this.textBox_address);
+            this.groupBox2.Controls.Add(this.lbl_address);
+            this.groupBox2.Controls.Add(this.textBox_name);
+            this.groupBox2.Controls.Add(this.lbl_name);
+            this.groupBox2.Controls.Add(this.lbl_surname);
+            this.groupBox2.Controls.Add(this.textBox_surname);
             this.groupBox2.Location = new System.Drawing.Point(12, 123);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(590, 125);
@@ -225,68 +229,68 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "User information";
             // 
-            // label10
+            // lbl_city
             // 
-            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_city.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(346, 99);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(24, 13);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "City";
+            this.lbl_city.AutoSize = true;
+            this.lbl_city.Location = new System.Drawing.Point(346, 99);
+            this.lbl_city.Name = "lbl_city";
+            this.lbl_city.Size = new System.Drawing.Size(24, 13);
+            this.lbl_city.TabIndex = 11;
+            this.lbl_city.Text = "City";
             // 
-            // textBox7
+            // textBox_zipcode
             // 
-            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_zipcode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox7.Location = new System.Drawing.Point(427, 70);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(157, 20);
-            this.textBox7.TabIndex = 10;
+            this.textBox_zipcode.Location = new System.Drawing.Point(427, 70);
+            this.textBox_zipcode.Name = "textBox_zipcode";
+            this.textBox_zipcode.Size = new System.Drawing.Size(157, 20);
+            this.textBox_zipcode.TabIndex = 10;
             // 
-            // label9
+            // lbl_zipcode
             // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_zipcode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(346, 73);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(51, 13);
-            this.label9.TabIndex = 9;
-            this.label9.Text = "ZIP code";
+            this.lbl_zipcode.AutoSize = true;
+            this.lbl_zipcode.Location = new System.Drawing.Point(346, 73);
+            this.lbl_zipcode.Name = "lbl_zipcode";
+            this.lbl_zipcode.Size = new System.Drawing.Size(51, 13);
+            this.lbl_zipcode.TabIndex = 9;
+            this.lbl_zipcode.Text = "ZIP code";
             // 
-            // textBox6
+            // textBox_address
             // 
-            this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_address.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox6.Location = new System.Drawing.Point(427, 44);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(157, 20);
-            this.textBox6.TabIndex = 8;
+            this.textBox_address.Location = new System.Drawing.Point(427, 44);
+            this.textBox_address.Name = "textBox_address";
+            this.textBox_address.Size = new System.Drawing.Size(157, 20);
+            this.textBox_address.TabIndex = 8;
             // 
-            // label8
+            // lbl_address
             // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_address.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(346, 47);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(75, 13);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "Home address";
+            this.lbl_address.AutoSize = true;
+            this.lbl_address.Location = new System.Drawing.Point(346, 47);
+            this.lbl_address.Name = "lbl_address";
+            this.lbl_address.Size = new System.Drawing.Size(75, 13);
+            this.lbl_address.TabIndex = 7;
+            this.lbl_address.Text = "Home address";
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox10);
-            this.groupBox3.Controls.Add(this.label11);
-            this.groupBox3.Controls.Add(this.textBox11);
-            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.textBox_mail);
+            this.groupBox3.Controls.Add(this.lbl_phone);
+            this.groupBox3.Controls.Add(this.textBox_phone);
+            this.groupBox3.Controls.Add(this.lbl_mail);
             this.groupBox3.Controls.Add(this.textBox4);
             this.groupBox3.Location = new System.Drawing.Point(12, 254);
             this.groupBox3.Name = "groupBox3";
@@ -295,55 +299,65 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Contact information";
             // 
-            // textBox10
+            // textBox_mail
             // 
-            this.textBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_mail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox10.Location = new System.Drawing.Point(67, 64);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(157, 20);
-            this.textBox10.TabIndex = 13;
+            this.textBox_mail.Location = new System.Drawing.Point(67, 64);
+            this.textBox_mail.Name = "textBox_mail";
+            this.textBox_mail.Size = new System.Drawing.Size(157, 20);
+            this.textBox_mail.TabIndex = 13;
             // 
-            // label11
+            // lbl_phone
             // 
-            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lbl_phone.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 93);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(38, 13);
-            this.label11.TabIndex = 8;
-            this.label11.Text = "Phone";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
+            this.lbl_phone.AutoSize = true;
+            this.lbl_phone.Location = new System.Drawing.Point(6, 93);
+            this.lbl_phone.Name = "lbl_phone";
+            this.lbl_phone.Size = new System.Drawing.Size(38, 13);
+            this.lbl_phone.TabIndex = 8;
+            this.lbl_phone.Text = "Phone";
+            this.lbl_phone.Click += new System.EventHandler(this.label11_Click);
             // 
-            // textBox11
+            // textBox_phone
             // 
-            this.textBox11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_phone.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox11.Location = new System.Drawing.Point(67, 90);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(157, 20);
-            this.textBox11.TabIndex = 14;
+            this.textBox_phone.Location = new System.Drawing.Point(67, 90);
+            this.textBox_phone.Name = "textBox_phone";
+            this.textBox_phone.Size = new System.Drawing.Size(157, 20);
+            this.textBox_phone.TabIndex = 14;
             // 
-            // button1
+            // btn_submit
             // 
-            this.button1.Location = new System.Drawing.Point(452, 330);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(150, 40);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Submit";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_submit.Location = new System.Drawing.Point(452, 330);
+            this.btn_submit.Name = "btn_submit";
+            this.btn_submit.Size = new System.Drawing.Size(150, 40);
+            this.btn_submit.TabIndex = 14;
+            this.btn_submit.Text = "Submit";
+            this.btn_submit.UseVisualStyleBackColor = false;
+            this.btn_submit.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox_city
+            // 
+            this.textBox_city.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_city.Location = new System.Drawing.Point(427, 96);
+            this.textBox_city.Name = "textBox_city";
+            this.textBox_city.Size = new System.Drawing.Size(157, 20);
+            this.textBox_city.TabIndex = 12;
             // 
             // ClientAddUserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 382);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_submit);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -362,29 +376,30 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label lbl_username;
+        private System.Windows.Forms.Label lbl_name;
+        private System.Windows.Forms.Label lbl_surname;
+        private System.Windows.Forms.Label lbl_mail;
+        private System.Windows.Forms.TextBox textBox_username;
+        private System.Windows.Forms.TextBox textBox_name;
+        private System.Windows.Forms.TextBox textBox_surname;
         private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbl_validate_username;
+        private System.Windows.Forms.TextBox textBox_password;
+        private System.Windows.Forms.Label lbl_password;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lbl_validate_password;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lbl_city;
+        private System.Windows.Forms.TextBox textBox_zipcode;
+        private System.Windows.Forms.Label lbl_zipcode;
+        private System.Windows.Forms.TextBox textBox_address;
+        private System.Windows.Forms.Label lbl_address;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label lbl_phone;
+        private System.Windows.Forms.TextBox textBox_mail;
+        private System.Windows.Forms.TextBox textBox_phone;
+        private System.Windows.Forms.Button btn_submit;
+        private System.Windows.Forms.TextBox textBox_city;
     }
 }

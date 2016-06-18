@@ -108,6 +108,7 @@
             this.btn_new_user.TabIndex = 17;
             this.btn_new_user.Text = "Register new user";
             this.btn_new_user.UseVisualStyleBackColor = true;
+            this.btn_new_user.Click += new System.EventHandler(this.btn_new_user_Click_1);
             // 
             // textBox_user
             // 

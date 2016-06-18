@@ -19,6 +19,12 @@ namespace Client
         private static ClientLoginForm singletonInstance;
         delegate void SetTextCallback(string text);
 
+        public ClientLoginForm()
+        {
+            InitializeComponent();
+            initializeComponentValues();
+        }
+
         public static ClientLoginForm GetForm
         {
             get
@@ -30,31 +36,9 @@ namespace Client
             }
         }
 
-        public ClientLoginForm()
-        {
-            InitializeComponent();
-            initializeComponentValues();
-        }
-
-        public static string GetIP4Address()
-        {
-            string IP4Address = String.Empty;
-
-            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
-            {
-                if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    IP4Address = IPA.ToString();
-                    break;
-                }
-            }
-
-            return IP4Address;
-        }
-
         private void initializeComponentValues()
         {
-            
+
             if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 this.lbl_network.Text = "Network status: Available";
             else
@@ -76,6 +60,23 @@ namespace Client
                 updateNetworkAvailabilityText("Network status: Unavailable");
             }
         }
+
+        public static string GetIP4Address()
+        {
+            string IP4Address = String.Empty;
+
+            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
+            {
+                if (IPA.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    IP4Address = IPA.ToString();
+                    break;
+                }
+            }
+
+            return IP4Address;
+        }
+
         private void updateNetworkAvailabilityText(string text)
         {
             // InvokeRequired required compares the thread ID of the
@@ -94,7 +95,7 @@ namespace Client
             this.lbl_ip_addr.Text = "Client ip address: " + GetIP4Address();
         }
 
-        private void btn_new_user_Click(object sender, EventArgs e)
+        private void btn_new_user_Click_1(object sender, EventArgs e)
         {
             this.Visible = false;
             ClientAddUserForm.GetForm.Show();
