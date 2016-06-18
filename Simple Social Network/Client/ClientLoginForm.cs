@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.NetworkInformation;
 
 namespace Client
 {
@@ -27,49 +29,26 @@ namespace Client
 
         public ClientLoginForm()
         {
+            
+
             InitializeComponent();
+            NetworkChange.NetworkAvailabilityChanged += AvailabilityChanged;
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void AvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
-
+            if (e.IsAvailable)
+                MessageBox.Show("Network connected!");
+            else
+                MessageBox.Show("Network disconnected!");
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_new_user_Click(object sender, EventArgs e)
         {
             this.Visible = false;
             ClientAddUserForm.GetForm.Show();
-            
         }
     }
 }
