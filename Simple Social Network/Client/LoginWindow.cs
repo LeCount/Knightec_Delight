@@ -1,38 +1,29 @@
 ﻿using System;
-using System.Threading;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Client
+namespace ClientTcpCommunication
 {
-    public partial class ClientLoginForm : Form
+    public partial class LoginWindow : Form
     {
-        
-        private static ClientLoginForm singletonInstance;
+        private static LoginWindow singletonInstance;
         delegate void SetTextCallback(string text);
 
-        public ClientLoginForm()
+        public LoginWindow()
         {
             MessageBox.Show("Added code from new pc! ");
             InitializeComponent();
             initializeComponentValues();
         }
 
-        public static ClientLoginForm GetForm
+        public static LoginWindow GetForm
         {
             get
             {
                 if (singletonInstance == null || singletonInstance.IsDisposed)
-                    singletonInstance = new ClientLoginForm();
+                    singletonInstance = new LoginWindow();
 
                 return singletonInstance;
             }
@@ -72,11 +63,11 @@ namespace Client
                 if (IPA.AddressFamily == AddressFamily.InterNetwork)
                 {
                     IP4Address = IPA.ToString();
-                    break;
+                    return IP4Address;
                 }
             }
 
-            return IP4Address;
+            return "No ip address found";
         }
 
         private void updateNetworkAvailabilityText(string text)
@@ -100,7 +91,7 @@ namespace Client
         private void btn_new_user_Click_1(object sender, EventArgs e)
         {
             this.Visible = false;
-            ClientAddUserForm.GetForm.Show();
+            AddUserWindow.GetForm.Show();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Client
+﻿namespace ClientTcpCommunication
 {
-    partial class ClientAddUserForm
+    partial class AddUserWindow
     {
         /// <summary>
         /// Required designer variable.

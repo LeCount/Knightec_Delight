@@ -8,24 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Client
+namespace ClientTcpCommunication
 {
-    public partial class ClientAddUserForm : Form
+    public partial class AddUserWindow : Form
     {
-        private static ClientAddUserForm singletonInstance;
+        private static AddUserWindow singletonInstance;
 
-        public static ClientAddUserForm GetForm
+        public static AddUserWindow GetForm
         {
             get
             {
                 if (singletonInstance == null || singletonInstance.IsDisposed)
-                    singletonInstance = new ClientAddUserForm();
+                    singletonInstance = new AddUserWindow();
 
                 return singletonInstance;
             }
         }
 
-        public ClientAddUserForm()
+        public AddUserWindow()
         {
             InitializeComponent();
         }
@@ -33,7 +33,7 @@ namespace Client
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             this.Visible = false;
-            ClientLoginForm.GetForm.Show();
+            LoginWindow.GetForm.Show();
         }
     }
 }

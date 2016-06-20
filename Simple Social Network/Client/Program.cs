@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Client
+namespace ClientTcpCommunication
 {
     static class Program
     {
@@ -13,7 +13,7 @@ namespace Client
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(ClientLoginForm.GetForm);
+            Application.Run(LoginWindow.GetForm);
         }
     }
 }

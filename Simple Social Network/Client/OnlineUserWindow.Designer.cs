@@ -1,6 +1,6 @@
-﻿namespace Client
+﻿namespace ClientTcpCommunication
 {
-    partial class ConnectedClientForm
+    partial class OnlineUserWindow
     {
         /// <summary>
         /// Required designer variable.

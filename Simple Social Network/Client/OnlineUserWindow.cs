@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Client
+namespace ClientTcpCommunication
 {
-    public partial class ConnectedClientForm : Form
+    public partial class OnlineUserWindow : Form
     {
-        public ConnectedClientForm()
+        public OnlineUserWindow()
         {
             InitializeComponent();
         }
