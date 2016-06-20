@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace ClientTcpCommunication
 {
-    class Client
+    public class Client
     {
         /**something to consider: try connect timeout: http://www.splinter.com.au/opening-a-tcp-connection-in-c-with-a-custom-t/ **/
 
@@ -16,8 +18,6 @@ namespace ClientTcpCommunication
         private String CLIENT_IP_ADDR = "?";
 
         private LoginWindow loginWindow = null;
-        private AddUserWindow addUserWindow = null;
-        private OnlineUserWindow onlineUserWindow= null;
    
         private Thread read_thread = null;
         private byte[] charArrSend = null;
@@ -38,9 +38,45 @@ namespace ClientTcpCommunication
 
         private void init()
         {
-            SERVER_IP_ADDR = setServerIP();
+            Application.Run(LoginWindow.getForm(this));
+
+            //SERVER_IP_ADDR = setServerIP();
             CLIENT_IP_ADDR = getClientIP();
-            tryConnectToServer();
+            Thread serverConnect = new Thread(new ThreadStart (tryConnectToServer));
+        }
+
+        private void tryConnectToServer()
+        {
+            while (connected == false)
+            {
+                try
+                {
+                    TCP_Client.Connect(SERVER_IP_ADDR, SERVER_PORT_NUMBER);
+                    clientStream = TCP_Client.GetStream();
+                    connected = true;
+                    read_thread = new Thread(new ThreadStart(client_read));
+                    loginWindow.updateServerAvailability("Server status: Available");
+                }
+                catch (Exception e)
+                {
+                    loginWindow.updateServerAvailability("Server status: Unavailable " + e.Message);
+                }
+            }
+
+            
+        }
+
+        public bool checkInitialNetworkStatus()
+        {
+            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        }
+
+        public void monitorNetworkAvailability(object sender, NetworkAvailabilityEventArgs e)
+        {
+            if (e.IsAvailable)
+                loginWindow.updateNetworkAvailability("Network status: Available");
+            else
+                loginWindow.updateNetworkAvailability("Network status: Unavailable");
         }
 
         private string setServerIP()
@@ -48,7 +84,7 @@ namespace ClientTcpCommunication
             throw new NotImplementedException();
         }
 
-        private string getClientIP()
+        public string getClientIP()
         {
             string IP4Address = String.Empty;
 
@@ -62,26 +98,6 @@ namespace ClientTcpCommunication
             }
 
             return "No ip address found";
-        }
-
-
-        private void tryConnectToServer()
-        {
-            //should be a thread!
-            while (connected == false)
-            {
-                try
-                {
-                    TCP_Client.Connect(SERVER_IP_ADDR, SERVER_PORT_NUMBER);
-                    clientStream = TCP_Client.GetStream();
-                    connected = true;
-                }
-                catch (Exception e)
-                {
-                }
-            }
-
-            read_thread = new Thread(client_read);
         }
 
         private void client_read()
@@ -110,6 +126,5 @@ namespace ClientTcpCommunication
             read_thread.Abort();
             TCP_Client.Close();
         }
-
     }
 }

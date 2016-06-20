@@ -33,7 +33,7 @@ namespace ClientTcpCommunication
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             this.Visible = false;
-            LoginWindow.GetForm.Show();
+            //LoginWindow.GetForm.Show();
         }
     }
 }

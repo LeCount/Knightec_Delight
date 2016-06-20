@@ -36,6 +36,7 @@
             this.btn_new_user = new System.Windows.Forms.Button();
             this.textBox_user = new System.Windows.Forms.TextBox();
             this.textBox_password = new System.Windows.Forms.TextBox();
+            this.lbl_server_connect = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lbl_network
@@ -45,7 +46,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_network.AutoSize = true;
             this.lbl_network.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lbl_network.Location = new System.Drawing.Point(12, 215);
+            this.lbl_network.Location = new System.Drawing.Point(12, 199);
             this.lbl_network.Name = "lbl_network";
             this.lbl_network.Size = new System.Drawing.Size(81, 13);
             this.lbl_network.TabIndex = 2;
@@ -130,11 +131,25 @@
             this.textBox_password.Size = new System.Drawing.Size(122, 20);
             this.textBox_password.TabIndex = 14;
             // 
-            // ClientLoginForm
+            // lbl_server_connect
+            // 
+            this.lbl_server_connect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_server_connect.AutoSize = true;
+            this.lbl_server_connect.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lbl_server_connect.Location = new System.Drawing.Point(12, 219);
+            this.lbl_server_connect.Name = "lbl_server_connect";
+            this.lbl_server_connect.Size = new System.Drawing.Size(131, 13);
+            this.lbl_server_connect.TabIndex = 19;
+            this.lbl_server_connect.Text = "Server status: Unavailable";
+            // 
+            // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(340, 261);
+            this.Controls.Add(this.lbl_server_connect);
             this.Controls.Add(this.btn_login);
             this.Controls.Add(this.lbl_user);
             this.Controls.Add(this.lbl_password);
@@ -146,7 +161,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ClientLoginForm";
+            this.Name = "LoginWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User log in";
             this.ResumeLayout(false);
@@ -164,6 +179,7 @@
         private System.Windows.Forms.Button btn_new_user;
         private System.Windows.Forms.TextBox textBox_user;
         private System.Windows.Forms.TextBox textBox_password;
+        private System.Windows.Forms.Label lbl_server_connect;
     }
 }
 

@@ -12,8 +12,7 @@ namespace ClientTcpCommunication
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            Application.Run(LoginWindow.GetForm);
+            new Client();
         }
     }
 }
