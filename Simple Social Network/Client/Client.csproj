@@ -50,6 +50,7 @@
     <Compile Include="ClientAddUserForm.Designer.cs">
       <DependentUpon>ClientAddUserForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientForm.Designer.cs" />
     <Compile Include="ClientLoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
