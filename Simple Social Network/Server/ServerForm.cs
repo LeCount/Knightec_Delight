@@ -15,6 +15,8 @@ namespace Server
         public ServerForm()
         {
             InitializeComponent();
+
+            MessageBox.Show("Fisk!");
         }
     }
 }
