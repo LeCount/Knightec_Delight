@@ -42,6 +42,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lbl_validate_password = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBox_city = new System.Windows.Forms.TextBox();
             this.lbl_city = new System.Windows.Forms.Label();
             this.textBox_zipcode = new System.Windows.Forms.TextBox();
             this.lbl_zipcode = new System.Windows.Forms.Label();
@@ -52,7 +53,7 @@
             this.lbl_phone = new System.Windows.Forms.Label();
             this.textBox_phone = new System.Windows.Forms.TextBox();
             this.btn_submit = new System.Windows.Forms.Button();
-            this.textBox_city = new System.Windows.Forms.TextBox();
+            this.lbl_validate_mail = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -225,6 +226,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "User information";
             // 
+            // textBox_city
+            // 
+            this.textBox_city.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_city.Location = new System.Drawing.Point(427, 96);
+            this.textBox_city.Name = "textBox_city";
+            this.textBox_city.Size = new System.Drawing.Size(157, 20);
+            this.textBox_city.TabIndex = 12;
+            // 
             // lbl_city
             // 
             this.lbl_city.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -283,6 +294,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.lbl_validate_mail);
             this.groupBox3.Controls.Add(this.textBox_mail);
             this.groupBox3.Controls.Add(this.lbl_phone);
             this.groupBox3.Controls.Add(this.textBox_phone);
@@ -336,17 +348,17 @@
             this.btn_submit.Text = "Submit";
             this.btn_submit.UseVisualStyleBackColor = false;
             // 
-            // textBox_city
+            // lbl_validate_mail
             // 
-            this.textBox_city.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_city.Location = new System.Drawing.Point(427, 96);
-            this.textBox_city.Name = "textBox_city";
-            this.textBox_city.Size = new System.Drawing.Size(157, 20);
-            this.textBox_city.TabIndex = 12;
+            this.lbl_validate_mail.AutoSize = true;
+            this.lbl_validate_mail.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lbl_validate_mail.Location = new System.Drawing.Point(230, 67);
+            this.lbl_validate_mail.Name = "lbl_validate_mail";
+            this.lbl_validate_mail.Size = new System.Drawing.Size(54, 13);
+            this.lbl_validate_mail.TabIndex = 12;
+            this.lbl_validate_mail.Text = "ok/not ok";
             // 
-            // ClientAddUserForm
+            // AddUserWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -355,7 +367,7 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "ClientAddUserForm";
+            this.Name = "AddUserWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Register new user";
             this.groupBox1.ResumeLayout(false);
@@ -395,5 +407,6 @@
         private System.Windows.Forms.TextBox textBox_phone;
         private System.Windows.Forms.Button btn_submit;
         private System.Windows.Forms.TextBox textBox_city;
+        private System.Windows.Forms.Label lbl_validate_mail;
     }
 }
