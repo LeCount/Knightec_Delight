@@ -16,11 +16,13 @@ namespace Client
 {
     public partial class ClientLoginForm : Form
     {
+        
         private static ClientLoginForm singletonInstance;
         delegate void SetTextCallback(string text);
 
         public ClientLoginForm()
         {
+            MessageBox.Show("Added code from new pc! ");
             InitializeComponent();
             initializeComponentValues();
         }
