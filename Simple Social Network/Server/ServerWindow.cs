@@ -40,5 +40,10 @@ namespace ServerTcpCommunication
                 this.listbox_server_log.Items.Add(DateTime.Now.ToString("HH:mm:ss: ") + text);
             }
         }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
     }
 }
