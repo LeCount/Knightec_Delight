@@ -41,8 +41,10 @@ namespace ClientTcpCommunication
             loginWindow = LoginWindow.getForm(this);
             addUserWindow = AddUserWindow.getForm(this);
 
-            //SERVER_IP_ADDR = setServerIP();
-            loginWindow.ChangeClientIpAddress(GetClientIP());
+            CLIENT_IP_ADDR = GetClientIP();
+            SERVER_IP_ADDR = CLIENT_IP_ADDR; //this needs to be changed if a different computer is used!
+
+            loginWindow.ChangeClientIpAddress(CLIENT_IP_ADDR);
 
             if (InitialCheckOfNetworkStatus())
                 loginWindow.ChangeNetworkAvailability("Network status: Available");
