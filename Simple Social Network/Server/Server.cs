@@ -52,10 +52,13 @@ namespace ServerTcpCommunication
 
         private void ListenForConnectRequest()
         {
-            while (!myTCPListener.Pending()){}
+            while(true)
+            { 
+                while (!myTCPListener.Pending()){}
 
-            Socket currentSocket = myTCPListener.AcceptSocket();
-            serverWindow.AddServerLog("Connection accepted from " + currentSocket.RemoteEndPoint);
+                Socket currentSocket = myTCPListener.AcceptSocket();
+                serverWindow.AddServerLog("Connection accepted from " + currentSocket.RemoteEndPoint);
+            }
         }
 
         public bool InitialCheckOfNetworkStatus()
