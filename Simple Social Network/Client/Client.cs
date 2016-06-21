@@ -5,7 +5,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace ClientTcpCommunication
 {
@@ -18,7 +17,8 @@ namespace ClientTcpCommunication
         private String CLIENT_IP_ADDR = "?";
 
         private LoginWindow loginWindow = null;
-   
+        private AddUserWindow addUserWindow = null;
+
         private Thread read_thread = null;
         private byte[] charArrSend = null;
         private byte[] charArrReceive = new byte[100];
@@ -38,15 +38,32 @@ namespace ClientTcpCommunication
 
         private void init()
         {
-            Application.Run(LoginWindow.getForm(this));
+            loginWindow = LoginWindow.getForm(this);
+            addUserWindow = AddUserWindow.getForm(this);
 
             //SERVER_IP_ADDR = setServerIP();
-            CLIENT_IP_ADDR = getClientIP();
-            Thread serverConnect = new Thread(new ThreadStart (tryConnectToServer));
+            loginWindow.ChangeClientIpAddress(GetClientIP());
+
+            if (InitialCheckOfNetworkStatus())
+                loginWindow.ChangeNetworkAvailability("Network status: Available");
+            else
+                loginWindow.ChangeNetworkAvailability("Network status: Unavailable");
+
+            NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
+
+            Thread serverConnect = new Thread(TryConnectToServer);
+            serverConnect.Start();
+
+            loginWindow.ShowDialog();
+            addUserWindow.ShowDialog();
+            addUserWindow.Visible = false;
         }
 
-        private void tryConnectToServer()
+        private void TryConnectToServer()
         {
+            loginWindow.ChangeServerAvailability("Server status: Loking for server...");
+            Thread.Sleep(3000);
+
             while (connected == false)
             {
                 try
@@ -54,37 +71,36 @@ namespace ClientTcpCommunication
                     TCP_Client.Connect(SERVER_IP_ADDR, SERVER_PORT_NUMBER);
                     clientStream = TCP_Client.GetStream();
                     connected = true;
-                    read_thread = new Thread(new ThreadStart(client_read));
-                    loginWindow.updateServerAvailability("Server status: Available");
+                    read_thread = new Thread(new ThreadStart(Client_read));
+
+                    loginWindow.ChangeServerAvailability("Server status: Available");
                 }
                 catch (Exception e)
                 {
-                    loginWindow.updateServerAvailability("Server status: Unavailable " + e.Message);
+                    loginWindow.ChangeServerAvailability("Server status: Unavailable ");
                 }
             }
-
-            
         }
 
-        public bool checkInitialNetworkStatus()
+        public bool InitialCheckOfNetworkStatus()
         {
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
         }
 
-        public void monitorNetworkAvailability(object sender, NetworkAvailabilityEventArgs e)
+        public void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
             if (e.IsAvailable)
-                loginWindow.updateNetworkAvailability("Network status: Available");
+                loginWindow.ChangeNetworkAvailability("Network status: Available");
             else
-                loginWindow.updateNetworkAvailability("Network status: Unavailable");
+                loginWindow.ChangeNetworkAvailability("Network status: Unavailable");
         }
 
-        private string setServerIP()
+        private string SetServerIP()
         {
             throw new NotImplementedException();
         }
 
-        public string getClientIP()
+        public string GetClientIP()
         {
             string IP4Address = String.Empty;
 
@@ -100,7 +116,7 @@ namespace ClientTcpCommunication
             return "No ip address found";
         }
 
-        private void client_read()
+        private void Client_read()
         {
             numOfBytesRead = clientStream.Read(charArrReceive, 0, 100);
 
@@ -115,16 +131,26 @@ namespace ClientTcpCommunication
             }
         }
 
-        public void client_write(String stringToSend)
+        public void Client_write(String stringToSend)
         {
             charArrSend = asciiEncode.GetBytes(stringToSend);
             clientStream.Write(charArrSend, 0, charArrSend.Length);
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
             read_thread.Abort();
             TCP_Client.Close();
+        }
+
+        public void ShowLoginWindow()
+        {
+            loginWindow.Show();
+        }
+
+        public void ShowAddUserWindow()
+        {
+            addUserWindow.ShowDialog();
         }
     }
 }

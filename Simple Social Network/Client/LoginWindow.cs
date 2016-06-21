@@ -7,72 +7,48 @@ namespace ClientTcpCommunication
     public partial class LoginWindow : Form
     {
         private static LoginWindow singletonInstance;
-        delegate void SetTextCallback(string text);
-        Client clientNetworking = null;
+        delegate void SetTextEventHandler(string text);
+        private Client clientNetworking = null;
 
-        public LoginWindow()
-        {
-            InitializeComponent();
-            initializeNetworkStatus();
-        }
+        public LoginWindow() { InitializeComponent(); }
 
         public LoginWindow(Client c)
         {
             clientNetworking = c;
             InitializeComponent();
-            initializeNetworkStatus();
         }
 
-        public static LoginWindow getForm(Client c)
-        {
-            return singletonInstance = new LoginWindow(c);
-        }
+        public static LoginWindow getForm(Client c) { return singletonInstance = new LoginWindow(c); }
 
-        public static LoginWindow getForm()
-        {
-            return singletonInstance;
-        }
+        public static LoginWindow getForm() { return singletonInstance; }
 
-        private void initializeNetworkStatus()
-        {
-
-            if (clientNetworking.checkInitialNetworkStatus())
-                updateNetworkAvailability("Network status: Available");
-            else
-                updateNetworkAvailability("Network status: Unavailable");
-
-            NetworkChange.NetworkAvailabilityChanged += clientNetworking.monitorNetworkAvailability;
-
-            updateClientIpAddress("Client ip address: " + clientNetworking.getClientIP());
-        }
-
-        public void updateNetworkAvailability(string text)
+        public void ChangeNetworkAvailability(string text)
         {
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (this.lbl_network.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(updateNetworkAvailability);
-                this.Invoke(d, new object[] { text });
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeNetworkAvailability);
+                this.Invoke(delegateMethod, new object[] { text });
             }
             else
             {
                 this.lbl_network.Text = text;
             }
 
-            updateClientIpAddress("Client ip address: " + clientNetworking.getClientIP());
+            ChangeClientIpAddress("Client ip address: " + clientNetworking.GetClientIP());
         }
 
-        public void updateClientIpAddress(string text)
+        public void ChangeClientIpAddress(string text)
         {
-            // InvokeRequired required compares the thread ID of the
+            // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(updateClientIpAddress);
-                this.Invoke(d, new object[] { text });
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeClientIpAddress);
+                this.Invoke(delegateMethod, new object[] { text });
             }
             else
             {
@@ -80,15 +56,15 @@ namespace ClientTcpCommunication
             }
         }
 
-        public void updateServerAvailability(string text)
+        public void ChangeServerAvailability(string text)
         {
-            // InvokeRequired required compares the thread ID of the
+            // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(updateServerAvailability);
-                this.Invoke(d, new object[] { text });
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeServerAvailability);
+                this.Invoke(delegateMethod, new object[] { text });
             }
             else
             {
@@ -96,10 +72,15 @@ namespace ClientTcpCommunication
             }
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
+
         private void btn_new_user_Click_1(object sender, EventArgs e)
         {
             this.Visible = false;
-            AddUserWindow.GetForm.Show();
+            clientNetworking.ShowAddUserWindow();
         }
     }
 }

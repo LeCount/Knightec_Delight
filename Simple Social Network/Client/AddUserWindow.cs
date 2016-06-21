@@ -1,28 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace ClientTcpCommunication
 {
     public partial class AddUserWindow : Form
     {
         private static AddUserWindow singletonInstance;
+        private Client clientNetworking = null;
 
-        public static AddUserWindow GetForm
+        public AddUserWindow(Client c)
         {
-            get
-            {
-                if (singletonInstance == null || singletonInstance.IsDisposed)
-                    singletonInstance = new AddUserWindow();
-
-                return singletonInstance;
-            }
+            clientNetworking = c;
+            InitializeComponent();
         }
 
         public AddUserWindow()
@@ -30,10 +18,20 @@ namespace ClientTcpCommunication
             InitializeComponent();
         }
 
+        public static AddUserWindow getForm(Client c)
+        {
+            return singletonInstance = new AddUserWindow(c);
+        }
+
+        public static AddUserWindow getForm()
+        {
+            return singletonInstance;
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             this.Visible = false;
-            //LoginWindow.GetForm.Show();
+            clientNetworking.ShowLoginWindow();
         }
     }
 }

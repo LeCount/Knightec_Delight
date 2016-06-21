@@ -49,11 +49,11 @@
             this.textBox_address = new System.Windows.Forms.TextBox();
             this.lbl_address = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lbl_validate_mail = new System.Windows.Forms.Label();
             this.textBox_mail = new System.Windows.Forms.TextBox();
             this.lbl_phone = new System.Windows.Forms.Label();
             this.textBox_phone = new System.Windows.Forms.TextBox();
             this.btn_submit = new System.Windows.Forms.Button();
-            this.lbl_validate_mail = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -307,6 +307,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Contact information";
             // 
+            // lbl_validate_mail
+            // 
+            this.lbl_validate_mail.AutoSize = true;
+            this.lbl_validate_mail.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.lbl_validate_mail.Location = new System.Drawing.Point(230, 67);
+            this.lbl_validate_mail.Name = "lbl_validate_mail";
+            this.lbl_validate_mail.Size = new System.Drawing.Size(54, 13);
+            this.lbl_validate_mail.TabIndex = 12;
+            this.lbl_validate_mail.Text = "ok/not ok";
+            // 
             // textBox_mail
             // 
             this.textBox_mail.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -348,16 +358,6 @@
             this.btn_submit.Text = "Submit";
             this.btn_submit.UseVisualStyleBackColor = false;
             // 
-            // lbl_validate_mail
-            // 
-            this.lbl_validate_mail.AutoSize = true;
-            this.lbl_validate_mail.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.lbl_validate_mail.Location = new System.Drawing.Point(230, 67);
-            this.lbl_validate_mail.Name = "lbl_validate_mail";
-            this.lbl_validate_mail.Size = new System.Drawing.Size(54, 13);
-            this.lbl_validate_mail.TabIndex = 12;
-            this.lbl_validate_mail.Text = "ok/not ok";
-            // 
             // AddUserWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,6 +367,9 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddUserWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Register new user";

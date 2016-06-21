@@ -140,9 +140,9 @@
             this.lbl_server_connect.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lbl_server_connect.Location = new System.Drawing.Point(12, 219);
             this.lbl_server_connect.Name = "lbl_server_connect";
-            this.lbl_server_connect.Size = new System.Drawing.Size(131, 13);
+            this.lbl_server_connect.Size = new System.Drawing.Size(75, 13);
             this.lbl_server_connect.TabIndex = 19;
-            this.lbl_server_connect.Text = "Server status: Unavailable";
+            this.lbl_server_connect.Text = "Server status: ";
             // 
             // LoginWindow
             // 
