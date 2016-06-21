@@ -42,7 +42,7 @@ namespace ClientTcpCommunication
             addUserWindow = AddUserWindow.getForm(this);
 
             CLIENT_IP_ADDR = GetClientIP();
-            SERVER_IP_ADDR = CLIENT_IP_ADDR; //this needs to be changed if a different computer is used!
+            SERVER_IP_ADDR = "192.168.1.70"; //this needs to be changed if a different computer is used!
 
             loginWindow.ChangeClientIpAddress(CLIENT_IP_ADDR);
 
@@ -70,7 +70,7 @@ namespace ClientTcpCommunication
             {
                 try
                 {
-                    TCP_Client.Connect(SERVER_IP_ADDR, SERVER_PORT_NUMBER);
+                    TCP_Client.Connect(IPAddress.Parse("192.168.1.70"), SERVER_PORT_NUMBER);
                     clientStream = TCP_Client.GetStream();
                     connected = true;
                     read_thread = new Thread(new ThreadStart(Client_read));
