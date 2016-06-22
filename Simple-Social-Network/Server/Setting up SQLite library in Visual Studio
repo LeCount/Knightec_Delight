@@ -1,8 +1,0 @@
-(1) Go to: https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki
-(2) Download file "sqlite-netFx451-setup-bundle-x86-2013-1.0.101.0" at: 
-(3) Install it
-(4) Copy the "System.Data.SQLite.dll" file to the Server-folder
-(5) In Visual Studio, in the Solution Explorer, right-click the server's "Reference-folder" and add the above .dll file.
-(6) Go to Build->Configuration manager
-(7) Click "Active Solution Platform" and add the corresponding architecture of the SQLite to Visual studio.
-    (Make sure it is added for both Debug and Relese)
