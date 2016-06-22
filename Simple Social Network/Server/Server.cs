@@ -1,19 +1,20 @@
-﻿using System.Data.SQLite; //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
+﻿
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using System.IO;
-using System.Windows.Forms;
+using ServerDBCommunication;
 
-namespace ServerTcpCommunication
+
+namespace ServerDBCommunication
 {
     public class Server
     {
         private Thread listenConnect = null;
         private Thread listenMessages = null;
+        private const string databaseFile = "serverDatabase.sqlite";
 
         private const int SERVER_PORT = 8001;
         private string SERVER_IP = "?";
@@ -26,19 +27,15 @@ namespace ServerTcpCommunication
 
         public Server()
         {
-            string path = Directory.GetCurrentDirectory();
-            MessageBox.Show(path);
-
-            SQLiteConnection myDB = new SQLiteConnection("ServerDatabase.sqlite");
-
             init();
-
-
-
         }
 
         private void init()
         {
+            ServerDatabase db = new ServerDatabase(databaseFile);
+            db.AddUser("obyte", "debyto");
+            
+
             serverWindow = ServerWindow.getForm(this);
 
             if(InitialCheckOfNetworkStatus())
