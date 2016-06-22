@@ -23,7 +23,7 @@ namespace ClientTcpCommunication
         private byte[] charArrSend = null;
         private byte[] charArrReceive = new byte[100];
         private Stream clientStream = null;
-        
+
         private string msg = "";
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
@@ -154,5 +154,6 @@ namespace ClientTcpCommunication
         {
             addUserWindow.ShowDialog();
         }
+
     }
 }
