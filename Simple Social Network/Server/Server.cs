@@ -1,15 +1,20 @@
-﻿using System.Data.SQLite;   //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
+﻿using System.Data.SQLite; //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO;
+using System.Windows.Forms;
 
 namespace ServerTcpCommunication
 {
     public class Server
     {
+        private Thread listenConnect = null;
+        private Thread listenMessages = null;
+
         private const int SERVER_PORT = 8001;
         private string SERVER_IP = "?";
         private TcpListener myTCPListener = null;
@@ -21,7 +26,15 @@ namespace ServerTcpCommunication
 
         public Server()
         {
+            string path = Directory.GetCurrentDirectory();
+            MessageBox.Show(path);
+
+            SQLiteConnection myDB = new SQLiteConnection("ServerDatabase.sqlite");
+
             init();
+
+
+
         }
 
         private void init()
@@ -49,11 +62,11 @@ namespace ServerTcpCommunication
             serverWindow.AddServerLog("Waiting for a connection...");
 
 
-            Thread listenConnect = new Thread(ListenForConnectRequest);
+            listenConnect = new Thread(ListenForConnectRequest);
             listenConnect.Start();
             Thread.Sleep(1000);
 
-            Thread listenMessages = new Thread(ListenForMessages);
+            listenMessages = new Thread(ListenForMessages);
             listenMessages.Start();
 
             serverWindow.ShowDialog();
@@ -70,12 +83,19 @@ namespace ServerTcpCommunication
             {
                 if (currentSocket.Connected)
                 {
-                    k = currentSocket.Receive(charArrReceive);
+                    try
+                    {
+                        k = currentSocket.Receive(charArrReceive);
 
-                    for (int i = 0; i < k; i++)
-                        incomingMsg = incomingMsg + (Convert.ToChar(charArrReceive[i]));
+                        for (int i = 0; i < k; i++)
+                            incomingMsg = incomingMsg + (Convert.ToChar(charArrReceive[i]));
 
-                    serverWindow.AddServerLog(incomingMsg);
+                        serverWindow.AddServerLog(incomingMsg);
+                    }
+                    catch(Exception)
+                    {
+                        //No message received!
+                    }
                 }
             }
         }
@@ -124,6 +144,13 @@ namespace ServerTcpCommunication
         private string GetUpTimeStart()
         {
             return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss"); 
+        }
+
+        public void stopAllThreads()
+        {
+            listenConnect.Abort();
+            listenMessages.Abort();
+            Thread.Sleep(200);
         }
     }
 }

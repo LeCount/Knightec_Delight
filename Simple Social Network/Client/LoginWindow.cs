@@ -74,6 +74,7 @@ namespace ClientTcpCommunication
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            clientNetworking.StopAllThreads();
             System.Environment.Exit(1);
         }
 

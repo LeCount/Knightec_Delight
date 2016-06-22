@@ -13,7 +13,7 @@ namespace ClientTcpCommunication
         /**something to consider: try connect timeout: http://www.splinter.com.au/opening-a-tcp-connection-in-c-with-a-custom-t/ **/
 
         private const int SERVER_PORT_NUMBER = 8001;
-        private String SERVER_IP_ADDR = "?";
+        //private String SERVER_IP_ADDR = "?";
         private String CLIENT_IP_ADDR = "?";
 
         private LoginWindow loginWindow = null;
@@ -31,6 +31,8 @@ namespace ClientTcpCommunication
         private int byteCount = 0;
         private bool connected;
 
+        private Thread serverConnect = null;
+
         public Client()
         {
             init();
@@ -42,7 +44,7 @@ namespace ClientTcpCommunication
             addUserWindow = AddUserWindow.getForm(this);
 
             CLIENT_IP_ADDR = GetClientIP();
-            SERVER_IP_ADDR = "192.168.1.70"; //this needs to be changed if a different computer is used!
+            //SERVER_IP_ADDR = "192.168.1.70"; //this needs to be changed if a different computer is used!
 
             loginWindow.ChangeClientIpAddress(CLIENT_IP_ADDR);
 
@@ -53,7 +55,7 @@ namespace ClientTcpCommunication
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
 
-            Thread serverConnect = new Thread(TryConnectToServer);
+            serverConnect = new Thread(TryConnectToServer);
             serverConnect.Start();
 
             loginWindow.ShowDialog();
@@ -63,9 +65,6 @@ namespace ClientTcpCommunication
 
         private void TryConnectToServer()
         {
-            loginWindow.ChangeServerAvailability("Server status: Loking for server...");
-            Thread.Sleep(3000);
-
             while (connected == false)
             {
                 try
@@ -77,11 +76,17 @@ namespace ClientTcpCommunication
 
                     loginWindow.ChangeServerAvailability("Server status: Available");
                 }
-                catch (Exception e)
+
+                catch(Exception)
                 {
                     loginWindow.ChangeServerAvailability("Server status: Unavailable ");
                 }
             }
+        }
+
+        internal void StopAllThreads()
+        {
+            serverConnect.Abort();
         }
 
         public bool InitialCheckOfNetworkStatus()

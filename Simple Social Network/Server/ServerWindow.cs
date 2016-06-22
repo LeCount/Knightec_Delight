@@ -43,6 +43,7 @@ namespace ServerTcpCommunication
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            serverNetworking.stopAllThreads();
             System.Environment.Exit(1);
         }
     }
