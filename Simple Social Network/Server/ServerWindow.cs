@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ServerTcpCommunication
+namespace ServerDBCommunication
 {
     public partial class ServerWindow : Form
     {

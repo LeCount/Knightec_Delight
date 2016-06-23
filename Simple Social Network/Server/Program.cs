@@ -1,7 +1,7 @@
 ﻿
 using System.Windows.Forms;
 
-namespace ServerTcpCommunication
+namespace ServerDBCommunication
 {
     static class Program
     {

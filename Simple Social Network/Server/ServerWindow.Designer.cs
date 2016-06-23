@@ -1,4 +1,4 @@
-﻿namespace ServerTcpCommunication
+﻿namespace ServerDBCommunication
 {
     partial class ServerWindow
     {
