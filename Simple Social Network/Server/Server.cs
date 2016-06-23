@@ -28,13 +28,7 @@ namespace ServerTcpCommunication
         {
             string path = Directory.GetCurrentDirectory();
             MessageBox.Show(path);
-
-            SQLiteConnection myDB = new SQLiteConnection("ServerDatabase.sqlite");
-
             init();
-
-
-
         }
 
         private void init()
@@ -150,7 +144,6 @@ namespace ServerTcpCommunication
         {
             listenConnect.Abort();
             listenMessages.Abort();
-            Thread.Sleep(200);
         }
     }
 }
