@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ServerDBCommunication
+namespace Async_TCP_server_networking
 {
     public partial class ServerWindow : Form
     {

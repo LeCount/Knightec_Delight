@@ -6,86 +6,91 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 using ServerDBCommunication;
+using System.Linq;
 
-
-namespace ServerDBCommunication
+namespace Async_TCP_server_networking
 {
     public class Server
     {
-        private Thread listenConnect = null;
-        private Thread listenMessages = null;
+        private Thread connectListener = null;
+        private Thread transmissionListener = null;
+        private Thread clientRequestExecutioner = null;
+
         private const string databaseFile = "serverDatabase.sqlite";
+        ServerDatabase db = new ServerDatabase(databaseFile);
+
+        private const int CONNECT_REQUEST = 1;
+        private const int DISCONNECT_REQUEST = 2;
+        private const int FRIEND_REQUEST = 3;
+        private const int CLIENT_DATA_ACCESS_REQUEST = 4;
+        private const int FORWARD_MESSAGE_REQUEST = 5;
 
         private const int SERVER_PORT = 8001;
+        private const int BUFFER_SIZE = 100;
         private string SERVER_IP = "?";
-        private TcpListener myTCPListener = null;
+        private TcpListener TCPListener = null;
 
         private ServerWindow serverWindow = null;
 
-        private List<Socket> socketList = new List<Socket>();
-        Socket currentSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private List<Socket> clientSocketList = new List<Socket>();
+        private List<string> clientRequestList = new List<string>();
 
-        public Server()
-        {
-            init();
-        }
+        Socket currentClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        
+
+        public Server() {init();}
 
         private void init()
         {
-            ServerDatabase db = new ServerDatabase(databaseFile);
-            db.AddUser("obyte", "debyto");
-            
-
             serverWindow = ServerWindow.getForm(this);
-
-            if(InitialCheckOfNetworkStatus())
-                serverWindow.AddServerLog("Network available");
-            else
-                serverWindow.AddServerLog("Network unavailable");
+            InitialCheckOfNetworkStatus();
 
             SERVER_IP = GetServerIP();
-            serverWindow.Text = "Server           #IP Address: " + SERVER_IP + "           #Port: " + SERVER_PORT + "           #Online since: " + GetUpTimeStart();
+            serverWindow.Text = "Server           " +
+                                "#IP Address: " + SERVER_IP + "           " +
+                                "#Port: " + SERVER_PORT + "           " + 
+                                "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
 
-            IPAddress ipAddr = IPAddress.Parse(SERVER_IP);
+            TCPListener = new TcpListener(IPAddress.Parse(SERVER_IP), SERVER_PORT);
+            TCPListener.Start();
 
-            /* Initializes the Listener */
-            myTCPListener = new TcpListener(ipAddr, SERVER_PORT);
+            connectListener = new Thread(ListenForConnectRequest);
+            connectListener.Start();
 
-            /* Start Listeneting at the specified port */
-            myTCPListener.Start();
+            transmissionListener = new Thread(ListenForTransmissions);
+            transmissionListener.Start();
 
-            serverWindow.AddServerLog("Waiting for a connection...");
-
-
-            listenConnect = new Thread(ListenForConnectRequest);
-            listenConnect.Start();
-            Thread.Sleep(1000);
-
-            listenMessages = new Thread(ListenForMessages);
-            listenMessages.Start();
+            clientRequestExecutioner = new Thread(ExecuteClientRequest);
+            clientRequestExecutioner.Start();
 
             serverWindow.ShowDialog();
         }
 
-        private void ListenForMessages()
+        private void ListenForTransmissions()
         {
-            byte[] charArrReceive = new byte[100];
+            byte[] receiveBuffer = new byte[BUFFER_SIZE];
             String incomingMsg = "";
-            serverWindow.AddServerLog("Listening for communications...");
-            int k;
+            serverWindow.AddServerLog("Listening for transmissions...");
+            int sizeOfBuffer;
 
             while (true)
             {
-                if (currentSocket.Connected)
+                if (currentClientSocket.Connected)
                 {
                     try
                     {
-                        k = currentSocket.Receive(charArrReceive);
+                        sizeOfBuffer = currentClientSocket.Receive(receiveBuffer);
 
-                        for (int i = 0; i < k; i++)
-                            incomingMsg = incomingMsg + (Convert.ToChar(charArrReceive[i]));
+                        for (int i = 0; i < sizeOfBuffer; i++)
+                            incomingMsg = incomingMsg + (Convert.ToChar(receiveBuffer[i]));
+
+                        //TODO
+                        //Store incoming message in a list, on the server side, and let the thread "clientRequestExecutioner"
+                        //handle the parsing and the execution of each request sequentially, and separately.
+
+                        //AddClientRequest(incomingMsg);
 
                         serverWindow.AddServerLog(incomingMsg);
                     }
@@ -99,19 +104,25 @@ namespace ServerDBCommunication
 
         private void ListenForConnectRequest()
         {
-            while(true)
-            { 
-                while (!myTCPListener.Pending()){}
+            serverWindow.AddServerLog("Waiting for connect requests...");
 
-                currentSocket = myTCPListener.AcceptSocket();
-                socketList.Add(currentSocket);
-                serverWindow.AddServerLog("Connection accepted from " + currentSocket.RemoteEndPoint);
+            while (true)
+            { 
+                while (!TCPListener.Pending()){}
+
+                //this does not mean that the client has logged in. Only that the client can communicate with the server
+                currentClientSocket = TCPListener.AcceptSocket();
+                clientSocketList.Add(currentClientSocket);
+                serverWindow.AddServerLog("Connection accepted from " + currentClientSocket.RemoteEndPoint);
             }
         }
 
-        public bool InitialCheckOfNetworkStatus()
+        public void InitialCheckOfNetworkStatus()
         {
-            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                serverWindow.AddServerLog("Network available");
+            else
+                serverWindow.AddServerLog("Network unavailable");
         }
 
         private void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
@@ -138,16 +149,120 @@ namespace ServerDBCommunication
             return "No ip address found";
         }
 
-        private string GetUpTimeStart()
+        private string GetServerUpTimeStart()
         {
             return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss"); 
         }
 
         public void stopAllThreads()
         {
-            listenConnect.Abort();
-            listenMessages.Abort();
+            connectListener.Abort();
+            transmissionListener.Abort();
             Thread.Sleep(200);
         }
+
+        private void ParseClientRequest(string incomingMessage)
+        {
+            int requestType = 0;
+            string uName = null;
+            string pWord = null;
+            Socket sender = null;
+            List<string> client_attributes = new List<string>();
+
+            requestType = GetRequestType(incomingMessage);
+
+
+            switch (requestType)
+            {
+                case CONNECT_REQUEST:
+                    uName = GetUsernameFromMsg(incomingMessage);
+                    pWord = GetPasswordFromMsg(incomingMessage);
+                    HandleConnectionRequest(uName, pWord);
+                    break;
+                case DISCONNECT_REQUEST:
+                    uName = GetUsernameFromMsg(incomingMessage);
+                    HandleDisconnectionRequest(uName);
+                    break;
+                case FRIEND_REQUEST:
+                    uName = GetUsernameFromMsg(incomingMessage);
+                    HandleFriendRequest(sender, uName);
+                    break;
+                case CLIENT_DATA_ACCESS_REQUEST:
+                    uName = GetUsernameFromMsg(incomingMessage);
+                    client_attributes = GetAttributesToAccessFromMsg(incomingMessage);
+                    HandleDataAccessRequest(uName, client_attributes);
+                    break;
+                case FORWARD_MESSAGE_REQUEST:
+                    uName = GetUsernameFromMsg(incomingMessage);
+                    HandleForwardingOfMessage(uName);
+                    break;
+                case default(int):
+                    break;
+            }
+        }
+
+        private void AddClientRequest(string incomingMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ExecuteClientRequest()
+        {
+            while(true)
+            {
+                if(clientRequestList.Count != 0 || clientRequestList == null)
+                {
+                    ParseClientRequest(clientRequestList.First());
+                    clientRequestList.RemoveAt(0);
+                }
+            }
+        }
+
+        private void HandleFriendRequest(Socket sender, string uName)
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<string> GetAttributesToAccessFromMsg(string incomingMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string GetPasswordFromMsg(string incomingMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string GetUsernameFromMsg(string incomingMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private int GetRequestType(string incomingMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleConnectionRequest(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleDisconnectionRequest(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleDataAccessRequest(string usernameToAccess, List<string> attributesToAccess)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleForwardingOfMessage(string recipentUsername)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

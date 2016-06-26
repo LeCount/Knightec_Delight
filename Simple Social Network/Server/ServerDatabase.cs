@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite; //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
-using System.Data.SqlClient;
 using System.Data;
 
 namespace ServerDBCommunication

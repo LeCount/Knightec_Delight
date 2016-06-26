@@ -1,4 +1,4 @@
-﻿namespace ServerDBCommunication
+﻿namespace Async_TCP_server_networking
 {
     partial class ServerWindow
     {
