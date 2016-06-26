@@ -19,3 +19,4 @@ C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\De
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.AddUserWindow.resources
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.LoginWindow.resources
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.OnlineUserWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.csprojResolveAssemblyReference.cache

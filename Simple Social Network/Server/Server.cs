@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
+using Shared_resources;
 
 namespace Async_TCP_server_networking
 {
@@ -14,6 +15,7 @@ namespace Async_TCP_server_networking
         private Thread connectListener = null;
         private Thread transmissionListener = null;
         private Thread clientRequestExecutioner = null;
+        private List<Socket> clientSocketList = new List<Socket>();
 
         private const int CONNECT_REQUEST =             1;
         private const int DISCONNECT_REQUEST =          2;
@@ -23,11 +25,11 @@ namespace Async_TCP_server_networking
         private const int FORWARD_MESSAGE_REQUEST =     6;
         private const int SERVER_PORT =                 8001;
         private const int BUFFER_SIZE =                 1024;
-        private const string DATABASE_FILE =            "serverDatabase.sqlite";
+        private const string DATABASE_FILE =            "serverDB.db";
 
         private string SERVER_IP = "?";
         private TcpListener TCPListener = null;
-        private List<Socket> clientSocketList = new List<Socket>();
+        
         private List<string> clientRequestList = new List<string>();
         private Socket currentClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private ServerWindow serverWindow = null;

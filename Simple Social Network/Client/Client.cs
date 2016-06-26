@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Shared_resources;
 
 namespace Async_TCP_client_networking
 {
@@ -19,7 +20,7 @@ namespace Async_TCP_client_networking
         private String SERVER_IP_ADDR = "?";
         private String CLIENT_IP_ADDR = "?";
         private byte[] transmittBuffer = null;
-        private byte[] receiveBuffer = new byte[100];
+        private byte[] receiveBuffer = new byte[BUFFER_SIZE];
         private Stream clientStream = null;
         private string msgFromServer = "";
         private TcpClient TCP_Client = new TcpClient();
