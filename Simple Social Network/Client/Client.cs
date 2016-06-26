@@ -6,32 +6,30 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace ClientTcpCommunication
+namespace Async_TCP_client_networking
 {
     public class Client
     {
-        /**something to consider: try connect timeout: http://www.splinter.com.au/opening-a-tcp-connection-in-c-with-a-custom-t/ **/
+        private Thread connectToServer = null;
+        private Thread read_thread = null;
 
         private const int SERVER_PORT_NUMBER = 8001;
+        private const int BUFFER_SIZE = 1024;
+
         private String SERVER_IP_ADDR = "?";
         private String CLIENT_IP_ADDR = "?";
-
-        private LoginWindow loginWindow = null;
-        private AddUserWindow addUserWindow = null;
-
-        private Thread read_thread = null;
-        private byte[] charArrSend = null;
-        private byte[] charArrReceive = new byte[100];
+        private byte[] transmittBuffer = null;
+        private byte[] receiveBuffer = new byte[100];
         private Stream clientStream = null;
-
-        private string msg = "";
+        private string msgFromServer = "";
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
         private int numOfBytesRead = 0;
         private int byteCount = 0;
         private bool connected;
 
-        private Thread serverConnect = null;
+        private LoginWindow loginWindow = null;
+        private AddUserWindow addUserWindow = null;
 
         public Client()
         {
@@ -46,21 +44,29 @@ namespace ClientTcpCommunication
             CLIENT_IP_ADDR = GetClientIP();
             SERVER_IP_ADDR = CLIENT_IP_ADDR; //this needs to be changed if a different computer is used!
 
-            loginWindow.ChangeClientIpAddress(CLIENT_IP_ADDR);
+            loginWindow.DisplayClientIpAddress(CLIENT_IP_ADDR);
 
-            if (InitialCheckOfNetworkStatus())
-                loginWindow.ChangeNetworkAvailability("Network status: Available");
-            else
-                loginWindow.ChangeNetworkAvailability("Network status: Unavailable");
+            InitialCheckOfNetworkStatus();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
 
-            serverConnect = new Thread(TryConnectToServer);
-            serverConnect.Start();
+            ClientStart();
 
             loginWindow.ShowDialog();
             addUserWindow.ShowDialog();
             addUserWindow.Visible = false;
+        }
+
+        private void ClientStart()
+        {
+            connectToServer = new Thread(TryConnectToServer);
+            connectToServer.Start();
+        }
+
+        public void ClientStop()
+        {
+            connectToServer.Abort();
+            read_thread.Abort();
         }
 
         private void TryConnectToServer()
@@ -72,8 +78,8 @@ namespace ClientTcpCommunication
                     TCP_Client.Connect(IPAddress.Parse(SERVER_IP_ADDR), SERVER_PORT_NUMBER);
                     clientStream = TCP_Client.GetStream();
                     connected = true;
-                    read_thread = new Thread(new ThreadStart(Client_read));
-
+                    read_thread = new Thread(Client_read);
+                    read_thread.Start();
                     loginWindow.ChangeServerAvailability("Server status: Available");
                 }
 
@@ -84,22 +90,20 @@ namespace ClientTcpCommunication
             }
         }
 
-        internal void StopAllThreads()
+        public void InitialCheckOfNetworkStatus()
         {
-            serverConnect.Abort();
-        }
-
-        public bool InitialCheckOfNetworkStatus()
-        {
-            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            if(System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                loginWindow.DisplayNetworkAvailability("Network status: Available");
+            else
+                loginWindow.DisplayNetworkAvailability("Network status: Unavailable");
         }
 
         public void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
             if (e.IsAvailable)
-                loginWindow.ChangeNetworkAvailability("Network status: Available");
+                loginWindow.DisplayNetworkAvailability("Network status: Available");
             else
-                loginWindow.ChangeNetworkAvailability("Network status: Unavailable");
+                loginWindow.DisplayNetworkAvailability("Network status: Unavailable");
         }
 
         private string SetServerIP()
@@ -109,15 +113,10 @@ namespace ClientTcpCommunication
 
         public string GetClientIP()
         {
-            string IP4Address = String.Empty;
-
             foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
             {
                 if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    IP4Address = IPA.ToString();
-                    return IP4Address;
-                }
+                    return IPA.ToString();
             }
 
             return "No ip address found";
@@ -125,29 +124,31 @@ namespace ClientTcpCommunication
 
         private void Client_read()
         {
-            numOfBytesRead = clientStream.Read(charArrReceive, 0, 100);
+            numOfBytesRead = clientStream.Read(receiveBuffer, 0, BUFFER_SIZE);
 
             for (byteCount = 0; byteCount < numOfBytesRead; byteCount++)
             {
-                msg = msg + Convert.ToChar(charArrReceive[byteCount]);
+                msgFromServer = msgFromServer + Convert.ToChar(receiveBuffer[byteCount]);
             }
 
-            if (!(msg == null || msg == ""))
+            if (!(msgFromServer == null || msgFromServer == ""))
             {
-                msg = "Incoming message: " + '"' + msg + '"';
+                msgFromServer = "Incoming message: " + '"' + msgFromServer + '"';
             }
+
+            //TODO: Display message in window
         }
 
         public void Client_write(String stringToSend)
         {
-            charArrSend = asciiEncode.GetBytes(stringToSend);
-            clientStream.Write(charArrSend, 0, charArrSend.Length);
+            transmittBuffer = asciiEncode.GetBytes(stringToSend);
+            clientStream.Write(transmittBuffer, 0, transmittBuffer.Length);
         }
 
         public void Disconnect()
         {
-            read_thread.Abort();
-            TCP_Client.Close();
+            //send request to disconnect to server
+            ClientStop();
         }
 
         public void ShowLoginWindow()
@@ -158,6 +159,11 @@ namespace ClientTcpCommunication
         public void ShowAddUserWindow()
         {
             addUserWindow.ShowDialog();
+        }
+
+        public void ShowOnlineUserWindow()
+        {
+            throw new NotImplementedException();
         }
 
     }

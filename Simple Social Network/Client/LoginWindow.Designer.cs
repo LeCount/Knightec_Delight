@@ -1,4 +1,4 @@
-﻿namespace ClientTcpCommunication
+﻿namespace Async_TCP_client_networking
 {
     partial class LoginWindow
     {

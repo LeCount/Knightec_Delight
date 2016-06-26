@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 
-namespace ClientTcpCommunication
+namespace Async_TCP_client_networking
 {
     public partial class LoginWindow : Form
     {
@@ -22,14 +22,14 @@ namespace ClientTcpCommunication
 
         public static LoginWindow getForm() { return singletonInstance; }
 
-        public void ChangeNetworkAvailability(string text)
+        public void DisplayNetworkAvailability(string text)
         {
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (this.lbl_network.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeNetworkAvailability);
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayNetworkAvailability);
                 this.Invoke(delegateMethod, new object[] { text });
             }
             else
@@ -37,17 +37,17 @@ namespace ClientTcpCommunication
                 this.lbl_network.Text = text;
             }
 
-            ChangeClientIpAddress("Client ip address: " + clientNetworking.GetClientIP());
+            DisplayClientIpAddress("Client ip address: " + clientNetworking.GetClientIP());
         }
 
-        public void ChangeClientIpAddress(string text)
+        public void DisplayClientIpAddress(string text)
         {
             // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeClientIpAddress);
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayClientIpAddress);
                 this.Invoke(delegateMethod, new object[] { text });
             }
             else
@@ -74,7 +74,7 @@ namespace ClientTcpCommunication
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            clientNetworking.StopAllThreads();
+            clientNetworking.ClientStop();
             System.Environment.Exit(1);
         }
 

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -16,29 +15,28 @@ namespace Async_TCP_server_networking
         private Thread transmissionListener = null;
         private Thread clientRequestExecutioner = null;
 
-        private const string databaseFile = "serverDatabase.sqlite";
-        ServerDatabase db = new ServerDatabase(databaseFile);
+        private const int CONNECT_REQUEST =             1;
+        private const int DISCONNECT_REQUEST =          2;
+        private const int AVAILABLE_USERS_REQUEST =     3;
+        private const int FRIEND_REQUEST =              4;
+        private const int CLIENT_DATA_ACCESS_REQUEST =  5;
+        private const int FORWARD_MESSAGE_REQUEST =     6;
+        private const int SERVER_PORT =                 8001;
+        private const int BUFFER_SIZE =                 1024;
+        private const string DATABASE_FILE =            "serverDatabase.sqlite";
 
-        private const int CONNECT_REQUEST = 1;
-        private const int DISCONNECT_REQUEST = 2;
-        private const int FRIEND_REQUEST = 3;
-        private const int CLIENT_DATA_ACCESS_REQUEST = 4;
-        private const int FORWARD_MESSAGE_REQUEST = 5;
-
-        private const int SERVER_PORT = 8001;
-        private const int BUFFER_SIZE = 100;
         private string SERVER_IP = "?";
         private TcpListener TCPListener = null;
-
-        private ServerWindow serverWindow = null;
-
         private List<Socket> clientSocketList = new List<Socket>();
         private List<string> clientRequestList = new List<string>();
+        private Socket currentClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private ServerWindow serverWindow = null;
+        private ServerDatabase db = new ServerDatabase(DATABASE_FILE);
 
-        Socket currentClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        
-
-        public Server() {init();}
+        public Server()
+        {
+            init();
+        }
 
         private void init()
         {
@@ -52,7 +50,12 @@ namespace Async_TCP_server_networking
                                 "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
+            ServerStart();
+            serverWindow.ShowDialog();
+        }
 
+        public void ServerStart()
+        {
             TCPListener = new TcpListener(IPAddress.Parse(SERVER_IP), SERVER_PORT);
             TCPListener.Start();
 
@@ -64,8 +67,14 @@ namespace Async_TCP_server_networking
 
             clientRequestExecutioner = new Thread(ExecuteClientRequest);
             clientRequestExecutioner.Start();
+        }
 
-            serverWindow.ShowDialog();
+        public void ServerStop()
+        {
+            clientRequestExecutioner.Abort();
+            transmissionListener.Abort();
+            connectListener.Abort();
+            TCPListener.Stop();
         }
 
         private void ListenForTransmissions()
@@ -86,18 +95,18 @@ namespace Async_TCP_server_networking
                         for (int i = 0; i < sizeOfBuffer; i++)
                             incomingMsg = incomingMsg + (Convert.ToChar(receiveBuffer[i]));
 
-                        //TODO
-                        //Store incoming message in a list, on the server side, and let the thread "clientRequestExecutioner"
-                        //handle the parsing and the execution of each request sequentially, and separately.
+                        AddClientRequest(incomingMsg);
 
-                        //AddClientRequest(incomingMsg);
-
-                        serverWindow.AddServerLog(incomingMsg);
+                        serverWindow.AddServerLog(incomingMsg);//Later, this can be displayed after message has been parsed
                     }
                     catch(Exception)
                     {
                         //No message received!
                     }
+                }
+                else
+                {
+                    currentClientSocket.Close();
                 }
             }
         }
@@ -135,15 +144,10 @@ namespace Async_TCP_server_networking
 
         private string GetServerIP()
         {
-            string IP4Address = String.Empty;
-
             foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
             {
                 if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    IP4Address = IPA.ToString();
-                    return IP4Address;
-                }
+                    return IPA.ToString();
             }
 
             return "No ip address found";
@@ -151,26 +155,20 @@ namespace Async_TCP_server_networking
 
         private string GetServerUpTimeStart()
         {
-            return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss"); 
-        }
-
-        public void stopAllThreads()
-        {
-            connectListener.Abort();
-            transmissionListener.Abort();
-            Thread.Sleep(200);
+            return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss");
         }
 
         private void ParseClientRequest(string incomingMessage)
         {
+            //temp variables to c that things turn out right
             int requestType = 0;
             string uName = null;
             string pWord = null;
             Socket sender = null;
             List<string> client_attributes = new List<string>();
 
-            requestType = GetRequestType(incomingMessage);
 
+            requestType = GetRequestType(incomingMessage);
 
             switch (requestType)
             {
@@ -182,6 +180,9 @@ namespace Async_TCP_server_networking
                 case DISCONNECT_REQUEST:
                     uName = GetUsernameFromMsg(incomingMessage);
                     HandleDisconnectionRequest(uName);
+                    break;
+                case AVAILABLE_USERS_REQUEST:
+                    HandleAvailableUsersRequest();
                     break;
                 case FRIEND_REQUEST:
                     uName = GetUsernameFromMsg(incomingMessage);
@@ -199,6 +200,11 @@ namespace Async_TCP_server_networking
                 case default(int):
                     break;
             }
+        }
+
+        private void HandleAvailableUsersRequest()
+        {
+            throw new NotImplementedException();
         }
 
         private void AddClientRequest(string incomingMessage)
@@ -262,7 +268,5 @@ namespace Async_TCP_server_networking
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

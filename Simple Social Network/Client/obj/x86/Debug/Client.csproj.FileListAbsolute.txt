@@ -12,11 +12,10 @@ C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Client\obj\
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\bin\x86\Debug\Client.exe.config
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\bin\x86\Debug\Client.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\bin\x86\Debug\Client.pdb
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\ClientTcpCommunication.AddUserWindow.resources
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\ClientTcpCommunication.LoginWindow.resources
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\ClientTcpCommunication.OnlineUserWindow.resources
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.Properties.Resources.resources
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.csproj.GenerateResource.Cache
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.pdb
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.AddUserWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.LoginWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Client\obj\x86\Debug\Async_TCP_client_networking.OnlineUserWindow.resources

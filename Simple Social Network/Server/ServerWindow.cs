@@ -43,7 +43,7 @@ namespace Async_TCP_server_networking
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            serverNetworking.stopAllThreads();
+            serverNetworking.ServerStop();
             System.Environment.Exit(1);
         }
     }

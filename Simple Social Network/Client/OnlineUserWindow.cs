@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClientTcpCommunication
+namespace Async_TCP_client_networking
 {
     public partial class OnlineUserWindow : Form
     {
