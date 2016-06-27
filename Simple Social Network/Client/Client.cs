@@ -53,6 +53,8 @@ namespace Async_TCP_client_networking
 
             ClientStart();
 
+            Thread.Sleep(1000);
+
             TCP_message msg = new TCP_message();
             msg.type = "1";
             msg.source = CLIENT_IP_ADDR;
@@ -86,6 +88,7 @@ namespace Async_TCP_client_networking
                 try
                 {
                     TCP_Client.Connect(IPAddress.Parse(SERVER_IP_ADDR), SERVER_PORT_NUMBER);
+                    
                     clientStream = TCP_Client.GetStream();
                     connected = true;
                     loginWindow.ChangeServerAvailability("Server status: Available");

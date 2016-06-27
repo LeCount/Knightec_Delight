@@ -132,7 +132,7 @@ namespace Async_TCP_server_networking
                 //this does not mean that the client has logged in. Only that the client can communicate with the server
                 currentClientSocket = TCPListener.AcceptSocket();
                 clientSocketList.Add(currentClientSocket);
-                serverWindow.AddServerLog("Connection accepted from " + currentClientSocket.RemoteEndPoint);
+                serverWindow.AddServerLog("New socket connection occurred: " + currentClientSocket.RemoteEndPoint);
             }
         }
 
