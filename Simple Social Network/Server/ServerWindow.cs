@@ -41,6 +41,38 @@ namespace Async_TCP_server_networking
             }
         }
 
+        public void AddClientRequest(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.InvokeRequired)
+            {
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(AddClientRequest);
+                this.Invoke(delegateMethod, new object[] { text });
+            }
+            else
+            {
+                this.listBox_requests.Items.Add(text);
+            }
+        }
+
+        public void RemoveNextRequest(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.InvokeRequired)
+            {
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(RemoveNextRequest);
+                this.Invoke(delegateMethod, new object[] { text });
+            }
+            else
+            {
+                this.listBox_requests.Items.RemoveAt(0);
+            }
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             serverNetworking.ServerStop();

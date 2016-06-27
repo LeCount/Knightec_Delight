@@ -56,7 +56,7 @@ namespace Async_TCP_client_networking
             Thread.Sleep(1000);
 
             TCP_message msg = new TCP_message();
-            msg.type = "1";
+            msg.type = "CONNECT_REQUEST";
             msg.source = CLIENT_IP_ADDR;
             msg.destination = "SERVER";
             Client_send(msg);

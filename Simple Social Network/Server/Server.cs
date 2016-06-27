@@ -102,9 +102,10 @@ namespace Async_TCP_server_networking
 
                             //AddClientRequest(msg);
 
-                            serverWindow.AddServerLog("TYPE: " + msg.type);
-                            serverWindow.AddServerLog("SOURCE: " + msg.source);
-                            serverWindow.AddServerLog("DESTINATION: " + msg.destination);
+                            serverWindow.AddServerLog("Received request from: " + msg.source);
+
+                            string newRequest = String.Format(" Type: {0} Client: {1} Destination: {2}", msg.type, msg.source, msg.destination);
+                            serverWindow.AddClientRequest(newRequest);
 
                             //Later, this can be displayed after message has been parsed
                         }
