@@ -1,29 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Shared_resources
 {
+    [Serializable]
     public class TCP_message
     {
-        private string type { get; set; }
-        private string source { get; set; }
-        private string destination { get; set; }
-        private List<string> msg_attributes = null;
+        public string type { get; set; }
+        public string source { get; set; }
+        public string destination { get; set; }
+        public List<string> attributes = new List<string>();
 
-        public TCP_message()
-        {
-            msg_attributes = new List<string>();
-        }
+        public TCP_message(){}
 
         private List<string> Get_msg_attributes()
         {
-            return msg_attributes;
+            return attributes;
         }
 
         private void Add_msg_attribute(string str)
         {
-            msg_attributes.Add(str);
+            attributes.Add(str);
         }
-
     }
-
 }

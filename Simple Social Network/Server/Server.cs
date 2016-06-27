@@ -7,6 +7,7 @@ using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
 using Shared_resources;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Async_TCP_server_networking
 {
@@ -81,10 +82,11 @@ namespace Async_TCP_server_networking
 
         private void ListenForTransmissions()
         {
+            int numOfBytesRead = 0;
             byte[] receiveBuffer = new byte[BUFFER_SIZE];
-            String incomingMsg = "";
+            Serializer s = new Serializer();
+
             serverWindow.AddServerLog("Listening for transmissions...");
-            int sizeOfBuffer;
 
             while (true)
             {
@@ -92,14 +94,20 @@ namespace Async_TCP_server_networking
                 {
                     try
                     {
-                        sizeOfBuffer = currentClientSocket.Receive(receiveBuffer);
+                        numOfBytesRead = currentClientSocket.Receive(receiveBuffer);
 
-                        for (int i = 0; i < sizeOfBuffer; i++)
-                            incomingMsg = incomingMsg + (Convert.ToChar(receiveBuffer[i]));
+                        if (numOfBytesRead > 0)
+                        {
+                            TCP_message msg = s.Deserialize_msg(receiveBuffer);
 
-                        AddClientRequest(incomingMsg);
+                            //AddClientRequest(msg);
 
-                        serverWindow.AddServerLog(incomingMsg);//Later, this can be displayed after message has been parsed
+                            serverWindow.AddServerLog("TYPE: " + msg.type);
+                            serverWindow.AddServerLog("SOURCE: " + msg.source);
+                            serverWindow.AddServerLog("DESTINATION: " + msg.destination);
+
+                            //Later, this can be displayed after message has been parsed
+                        }
                     }
                     catch(Exception)
                     {
@@ -209,7 +217,7 @@ namespace Async_TCP_server_networking
             throw new NotImplementedException();
         }
 
-        private void AddClientRequest(string incomingMessage)
+        private void AddClientRequest(TCP_message msg)
         {
             throw new NotImplementedException();
         }

@@ -7,7 +7,6 @@ namespace ServerDBCommunication
     public class ServerDatabase
     {
         private SQLiteConnection DBconnection;
-        private SQLiteCommand sql_command;
         private SQLiteCommand query;
 
         public ServerDatabase() { }

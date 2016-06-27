@@ -1,36 +1,36 @@
-﻿using System;
+﻿using Shared_resources;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
-using Shared_resources;
+using System.Windows.Forms;
 
 namespace Async_TCP_client_networking
 {
     public class Client
     {
         private Thread connectToServer = null;
-        private Thread read_thread = null;
+        private Thread readMessages = null;
 
         private const int SERVER_PORT_NUMBER = 8001;
         private const int BUFFER_SIZE = 1024;
 
         private String SERVER_IP_ADDR = "?";
         private String CLIENT_IP_ADDR = "?";
-        private byte[] transmittBuffer = null;
         private byte[] receiveBuffer = new byte[BUFFER_SIZE];
         private Stream clientStream = null;
-        private string msgFromServer = "";
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
         private int numOfBytesRead = 0;
-        private int byteCount = 0;
         private bool connected;
-
         private LoginWindow loginWindow = null;
         private AddUserWindow addUserWindow = null;
+        
 
         public Client()
         {
@@ -53,6 +53,12 @@ namespace Async_TCP_client_networking
 
             ClientStart();
 
+            TCP_message msg = new TCP_message();
+            msg.type = "1";
+            msg.source = CLIENT_IP_ADDR;
+            msg.destination = "SERVER";
+            Client_send(msg);
+
             loginWindow.ShowDialog();
             addUserWindow.ShowDialog();
             addUserWindow.Visible = false;
@@ -62,12 +68,15 @@ namespace Async_TCP_client_networking
         {
             connectToServer = new Thread(TryConnectToServer);
             connectToServer.Start();
+
+            //readMessages = new Thread(Client_read);
+            //readMessages.Start();
         }
 
         public void ClientStop()
         {
             connectToServer.Abort();
-            read_thread.Abort();
+            //readMessages.Abort();
         }
 
         private void TryConnectToServer()
@@ -79,8 +88,6 @@ namespace Async_TCP_client_networking
                     TCP_Client.Connect(IPAddress.Parse(SERVER_IP_ADDR), SERVER_PORT_NUMBER);
                     clientStream = TCP_Client.GetStream();
                     connected = true;
-                    read_thread = new Thread(Client_read);
-                    read_thread.Start();
                     loginWindow.ChangeServerAvailability("Server status: Available");
                 }
 
@@ -125,25 +132,38 @@ namespace Async_TCP_client_networking
 
         private void Client_read()
         {
-            numOfBytesRead = clientStream.Read(receiveBuffer, 0, BUFFER_SIZE);
-
-            for (byteCount = 0; byteCount < numOfBytesRead; byteCount++)
+            Serializer s = new Serializer();
+            while (true)
             {
-                msgFromServer = msgFromServer + Convert.ToChar(receiveBuffer[byteCount]);
-            }
+                numOfBytesRead = clientStream.Read(receiveBuffer, 0, BUFFER_SIZE);
 
-            if (!(msgFromServer == null || msgFromServer == ""))
-            {
-                msgFromServer = "Incoming message: " + '"' + msgFromServer + '"';
-            }
+                if (numOfBytesRead > 0)
+                {
+                    TCP_message msg = s.Deserialize_msg(receiveBuffer);
 
-            //TODO: Display message in window
+                    MessageBox.Show("Source: " + msg.source + "Type: " + msg.type);
+
+                    //for (byteCount = 0; byteCount < numOfBytesRead; byteCount++)
+                    //{
+                    //    msgFromServer = msgFromServer + Convert.ToChar(receiveBuffer[byteCount]);
+                    //}
+
+                    //if (!(msgFromServer == null || msgFromServer == ""))
+                    //{
+                    //    msgFromServer = "Incoming message: " + '"' + msgFromServer + '"';
+                    //}
+
+                    //TODO: Display message in window
+                }
+            }
         }
 
-        public void Client_write(String stringToSend)
+        public void Client_send(TCP_message msg)
         {
-            transmittBuffer = asciiEncode.GetBytes(stringToSend);
-            clientStream.Write(transmittBuffer, 0, transmittBuffer.Length);
+            Serializer s = new Serializer();
+            
+            byte[] byteBuffer = s.Serialize_msg(msg);
+            clientStream.Write(byteBuffer, 0, byteBuffer.Length);
         }
 
         public void Disconnect()
@@ -166,6 +186,5 @@ namespace Async_TCP_client_networking
         {
             throw new NotImplementedException();
         }
-
     }
 }
