@@ -16,5 +16,24 @@
         public const int SERVER_PORT =                      8001;
         public const int BUFFER_SIZE =                      1024;
         public const string DATABASE_FILE =                 "serverDB.db";
+
+
+        public static string GetRequestTypeAsText(int i)
+        {
+            switch(i)
+            {
+                case 1: return "JOIN REQUEST";
+                case 2: return "LOGIN REQUEST";
+                case 3: return "LOGOUT REQUEST";
+                case 4: return "GET AVAILABLE USERS REQUEST";
+                case 5: return "FRIEND REQUEST";
+                case 6: return "GET FRIENDS STATUS REQUEST";
+                case 7: return "GET_CLIENT DATA ACCESS REQUEST";
+                case 8: return "FORWARD MESSAGE REQUEST";
+                case 9: return "SERVER MESSAGE";
+            }
+
+            return "INVALID REQUEST";
+        }
     }
 }

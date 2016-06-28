@@ -115,7 +115,7 @@ namespace Async_TCP_server_networking
         {
             serverWindow.AddServerLog("Received request from: " + msg.source);
             clientRequestList.Add(msg);
-            string newRequestText = string.Format(" Type: {0} Client: {1} Destination: {2}", msg.type, msg.source, msg.destination);
+            string newRequestText = string.Format("{0} From: '{1}' To: '{2}'", TCP_constants.GetRequestTypeAsText(msg.type), msg.source, msg.destination);
             serverWindow.DisplayRequestInListbox(newRequestText);
         }
 
@@ -159,20 +159,39 @@ namespace Async_TCP_server_networking
             {
                 case TCP_constants.JOIN_REQUEST:
 
+                    //Check username, password and email, and notyfy client
+                    //add IP address to confirmed IP addresses, and user data to database
+                    //generate and save confirmation code in database, and send it to user email. Request client to log in again
                     break;
                 case TCP_constants.LOGIN_REQUEST:
+
+                    //username exists?
+                    //IP confirmed?
+                    //Password/code correct?
+                    //If ip was not confirmed, add it to confirmed IP addresses
+                    //Client online allready?
+                    //Accept login
+                    //Broadcast to all users online
 
                     break;
                 case TCP_constants.LOGOUT_REQUEST:
 
+                    //Acknowledge client
+                    //close client socket
+                    //broadcast action to all clients still online
+
                     break;
                 case TCP_constants.GET_AVAILABLE_USERS_REQUEST:
+
+                    //send list of all usernames
 
                     break;
                 case TCP_constants.FRIEND_REQUEST:
 
                     break;
                 case TCP_constants.GET_FRIENDS_STATUS_REQUEST:
+
+                    //send information to client, whether it's friends are online or not 
 
                     break;
                 case TCP_constants.GET_CLIENT_DATA_ACCESS_REQUEST:
