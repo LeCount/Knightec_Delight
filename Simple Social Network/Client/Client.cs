@@ -4,8 +4,6 @@ using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -15,19 +13,18 @@ namespace Async_TCP_client_networking
     public class Client
     {
         private Thread connectToServer = null;
-        private Thread readMessages = null;
+        //private Thread readMessages = null;
 
-        private const int SERVER_PORT_NUMBER = 8001;
-        private const int BUFFER_SIZE = 1024;
+        private string server_ip_addr = "?";
+        private string client_ip_addr = "?";
+        private int numOfBytesRead = 0;
+        private bool connected;
 
-        private String SERVER_IP_ADDR = "?";
-        private String CLIENT_IP_ADDR = "?";
-        private byte[] receiveBuffer = new byte[BUFFER_SIZE];
+        private byte[] receiveBuffer = new byte[TCP_constants.BUFFER_SIZE];
         private Stream clientStream = null;
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
-        private int numOfBytesRead = 0;
-        private bool connected;
+        
         private LoginWindow loginWindow = null;
         private AddUserWindow addUserWindow = null;
         
@@ -42,10 +39,10 @@ namespace Async_TCP_client_networking
             loginWindow = LoginWindow.getForm(this);
             addUserWindow = AddUserWindow.getForm(this);
 
-            CLIENT_IP_ADDR = GetClientIP();
-            SERVER_IP_ADDR = CLIENT_IP_ADDR; //this needs to be changed if a different computer is used!
+            client_ip_addr = TCP_networking.GetIP();
+            server_ip_addr = client_ip_addr; //this needs to be changed if a different computer is used!
 
-            loginWindow.DisplayClientIpAddress(CLIENT_IP_ADDR);
+            loginWindow.DisplayClientIpAddress(client_ip_addr);
 
             InitialCheckOfNetworkStatus();
 
@@ -56,8 +53,8 @@ namespace Async_TCP_client_networking
             Thread.Sleep(1000);
 
             TCP_message msg = new TCP_message();
-            msg.type = "CONNECT_REQUEST";
-            msg.source = CLIENT_IP_ADDR;
+            msg.type = TCP_constants.LOGIN_REQUEST;
+            msg.source = client_ip_addr;
             msg.destination = "SERVER";
             Client_send(msg);
 
@@ -87,7 +84,7 @@ namespace Async_TCP_client_networking
             {
                 try
                 {
-                    TCP_Client.Connect(IPAddress.Parse(SERVER_IP_ADDR), SERVER_PORT_NUMBER);
+                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_constants.SERVER_PORT);
                     
                     clientStream = TCP_Client.GetStream();
                     connected = true;
@@ -103,7 +100,7 @@ namespace Async_TCP_client_networking
 
         public void InitialCheckOfNetworkStatus()
         {
-            if(System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            if(NetworkInterface.GetIsNetworkAvailable())
                 loginWindow.DisplayNetworkAvailability("Network status: Available");
             else
                 loginWindow.DisplayNetworkAvailability("Network status: Unavailable");
@@ -122,41 +119,18 @@ namespace Async_TCP_client_networking
             throw new NotImplementedException();
         }
 
-        public string GetClientIP()
-        {
-            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
-            {
-                if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                    return IPA.ToString();
-            }
-
-            return "No ip address found";
-        }
-
         private void Client_read()
         {
             Serializer s = new Serializer();
+
             while (true)
             {
-                numOfBytesRead = clientStream.Read(receiveBuffer, 0, BUFFER_SIZE);
+                numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_constants.BUFFER_SIZE);
 
                 if (numOfBytesRead > 0)
                 {
                     TCP_message msg = s.Deserialize_msg(receiveBuffer);
-
                     MessageBox.Show("Source: " + msg.source + "Type: " + msg.type);
-
-                    //for (byteCount = 0; byteCount < numOfBytesRead; byteCount++)
-                    //{
-                    //    msgFromServer = msgFromServer + Convert.ToChar(receiveBuffer[byteCount]);
-                    //}
-
-                    //if (!(msgFromServer == null || msgFromServer == ""))
-                    //{
-                    //    msgFromServer = "Incoming message: " + '"' + msgFromServer + '"';
-                    //}
-
-                    //TODO: Display message in window
                 }
             }
         }

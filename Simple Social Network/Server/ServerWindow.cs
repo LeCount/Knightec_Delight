@@ -9,6 +9,7 @@ namespace Async_TCP_server_networking
         private Server serverNetworking = null;
 
         delegate void SetTextEventHandler(string text);
+        delegate void RemoveTextFromListHanler();
 
         public ServerWindow()
         {
@@ -41,14 +42,14 @@ namespace Async_TCP_server_networking
             }
         }
 
-        public void AddClientRequest(string text)
+        public void DisplayRequestInListbox(string text)
         {
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (this.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(AddClientRequest);
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayRequestInListbox);
                 this.Invoke(delegateMethod, new object[] { text });
             }
             else
@@ -57,15 +58,15 @@ namespace Async_TCP_server_networking
             }
         }
 
-        public void RemoveNextRequest(string text)
+        public void RemoveNextRequestText()
         {
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (this.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(RemoveNextRequest);
-                this.Invoke(delegateMethod, new object[] { text });
+                RemoveTextFromListHanler delegateMethod = new RemoveTextFromListHanler(RemoveNextRequestText);
+                this.Invoke(delegateMethod, new object[] {  });
             }
             else
             {

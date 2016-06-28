@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Net.NetworkInformation;
 
 namespace Async_TCP_client_networking
 {
@@ -19,7 +18,6 @@ namespace Async_TCP_client_networking
         }
 
         public static LoginWindow getForm(Client c) { return singletonInstance = new LoginWindow(c); }
-
         public static LoginWindow getForm() { return singletonInstance; }
 
         public void DisplayNetworkAvailability(string text)
@@ -37,7 +35,7 @@ namespace Async_TCP_client_networking
                 this.lbl_network.Text = text;
             }
 
-            DisplayClientIpAddress("Client ip address: " + clientNetworking.GetClientIP());
+            DisplayClientIpAddress("Client ip address: " + text);
         }
 
         public void DisplayClientIpAddress(string text)

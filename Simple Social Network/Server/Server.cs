@@ -7,7 +7,6 @@ using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
 using Shared_resources;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Async_TCP_server_networking
 {
@@ -16,25 +15,14 @@ namespace Async_TCP_server_networking
         private Thread connectListener = null;
         private Thread transmissionListener = null;
         private Thread clientRequestExecutioner = null;
+
         private List<Socket> clientSocketList = new List<Socket>();
-
-        private const int CONNECT_REQUEST =             1;
-        private const int DISCONNECT_REQUEST =          2;
-        private const int AVAILABLE_USERS_REQUEST =     3;
-        private const int FRIEND_REQUEST =              4;
-        private const int CLIENT_DATA_ACCESS_REQUEST =  5;
-        private const int FORWARD_MESSAGE_REQUEST =     6;
-        private const int SERVER_PORT =                 8001;
-        private const int BUFFER_SIZE =                 1024;
-        private const string DATABASE_FILE =            "serverDB.db";
-
-        private string SERVER_IP = "?";
         private TcpListener TCPListener = null;
-        
-        private List<string> clientRequestList = new List<string>();
+        private List<TCP_message> clientRequestList = new List<TCP_message>();
         private Socket currentClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
         private ServerWindow serverWindow = null;
-        private ServerDatabase db = new ServerDatabase(DATABASE_FILE);
+        private ServerDatabase db = new ServerDatabase(TCP_constants.DATABASE_FILE);
 
         public Server()
         {
@@ -44,12 +32,11 @@ namespace Async_TCP_server_networking
         private void init()
         {
             serverWindow = ServerWindow.getForm(this);
-            InitialCheckOfNetworkStatus();
+            InitialNetworkStatusCheck();
 
-            SERVER_IP = GetServerIP();
             serverWindow.Text = "Server           " +
-                                "#IP Address: " + SERVER_IP + "           " +
-                                "#Port: " + SERVER_PORT + "           " + 
+                                "#IP Address: " + TCP_networking.GetIP() + "           " +
+                                "#Port: " + TCP_constants.SERVER_PORT + "           " + 
                                 "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
@@ -59,16 +46,16 @@ namespace Async_TCP_server_networking
 
         public void ServerStart()
         {
-            TCPListener = new TcpListener(IPAddress.Parse(SERVER_IP), SERVER_PORT);
+            TCPListener = new TcpListener(IPAddress.Parse(TCP_networking.GetIP()), TCP_constants.SERVER_PORT);
             TCPListener.Start();
 
             connectListener = new Thread(ListenForConnectRequest);
             connectListener.Start();
 
-            transmissionListener = new Thread(ListenForTransmissions);
+            transmissionListener = new Thread(ListenForRequests);
             transmissionListener.Start();
 
-            clientRequestExecutioner = new Thread(ExecuteClientRequest);
+            clientRequestExecutioner = new Thread(ExecuteClientRequests);
             clientRequestExecutioner.Start();
         }
 
@@ -80,10 +67,23 @@ namespace Async_TCP_server_networking
             TCPListener.Stop();
         }
 
-        private void ListenForTransmissions()
+        private void ListenForConnectRequest()
+        {
+            serverWindow.AddServerLog("Waiting for connect requests...");
+
+            while (true)
+            {
+                while (!TCPListener.Pending()) { }
+                currentClientSocket = TCPListener.AcceptSocket();
+                clientSocketList.Add(currentClientSocket);
+                serverWindow.AddServerLog("New socket connection occurred: " + currentClientSocket.RemoteEndPoint);
+            }
+        }
+
+        private void ListenForRequests()
         {
             int numOfBytesRead = 0;
-            byte[] receiveBuffer = new byte[BUFFER_SIZE];
+            byte[] receiveBuffer = new byte[TCP_constants.BUFFER_SIZE];
             Serializer s = new Serializer();
 
             serverWindow.AddServerLog("Listening for transmissions...");
@@ -99,21 +99,10 @@ namespace Async_TCP_server_networking
                         if (numOfBytesRead > 0)
                         {
                             TCP_message msg = s.Deserialize_msg(receiveBuffer);
-
-                            //AddClientRequest(msg);
-
-                            serverWindow.AddServerLog("Received request from: " + msg.source);
-
-                            string newRequest = String.Format(" Type: {0} Client: {1} Destination: {2}", msg.type, msg.source, msg.destination);
-                            serverWindow.AddClientRequest(newRequest);
-
-                            //Later, this can be displayed after message has been parsed
+                            AddClientRequest(msg);
                         }
                     }
-                    catch(Exception)
-                    {
-                        //No message received!
-                    }
+                    catch(Exception) { /**No message received!**/}
                 }
                 else
                 {
@@ -122,24 +111,17 @@ namespace Async_TCP_server_networking
             }
         }
 
-        private void ListenForConnectRequest()
+        private void AddClientRequest(TCP_message msg)
         {
-            serverWindow.AddServerLog("Waiting for connect requests...");
-
-            while (true)
-            { 
-                while (!TCPListener.Pending()){}
-
-                //this does not mean that the client has logged in. Only that the client can communicate with the server
-                currentClientSocket = TCPListener.AcceptSocket();
-                clientSocketList.Add(currentClientSocket);
-                serverWindow.AddServerLog("New socket connection occurred: " + currentClientSocket.RemoteEndPoint);
-            }
+            serverWindow.AddServerLog("Received request from: " + msg.source);
+            clientRequestList.Add(msg);
+            string newRequestText = string.Format(" Type: {0} Client: {1} Destination: {2}", msg.type, msg.source, msg.destination);
+            serverWindow.DisplayRequestInListbox(newRequestText);
         }
 
-        public void InitialCheckOfNetworkStatus()
+        public void InitialNetworkStatusCheck()
         {
-            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            if (NetworkInterface.GetIsNetworkAvailable())
                 serverWindow.AddServerLog("Network available");
             else
                 serverWindow.AddServerLog("Network unavailable");
@@ -153,62 +135,55 @@ namespace Async_TCP_server_networking
                 serverWindow.AddServerLog("Network unavailable");
         }
 
-        private string GetServerIP()
-        {
-            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
-            {
-                if (IPA.AddressFamily == AddressFamily.InterNetwork)
-                    return IPA.ToString();
-            }
-
-            return "No ip address found";
-        }
-
         private string GetServerUpTimeStart()
         {
             return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss");
         }
 
-        private void ParseClientRequest(string incomingMessage)
+        private void ExecuteClientRequests()
         {
-            //temp variables to c that things turn out right
-            int requestType = 0;
-            string uName = null;
-            string pWord = null;
-            Socket sender = null;
-            List<string> client_attributes = new List<string>();
-
-
-            requestType = GetRequestType(incomingMessage);
-
-            switch (requestType)
+            while (true)
             {
-                case CONNECT_REQUEST:
-                    uName = GetUsernameFromMsg(incomingMessage);
-                    pWord = GetPasswordFromMsg(incomingMessage);
-                    HandleConnectionRequest(uName, pWord);
+                if (clientRequestList.Count != 0 || clientRequestList == null)
+                {
+                    HandleClientRequest(clientRequestList.ElementAt(0));
+                    clientRequestList.RemoveAt(0);
+                    serverWindow.RemoveNextRequestText();
+                }
+            }
+        }
+
+        private void HandleClientRequest(TCP_message msg)
+        {
+            switch (msg.type)
+            {
+                case TCP_constants.JOIN_REQUEST:
+
                     break;
-                case DISCONNECT_REQUEST:
-                    uName = GetUsernameFromMsg(incomingMessage);
-                    HandleDisconnectionRequest(uName);
+                case TCP_constants.LOGIN_REQUEST:
+
                     break;
-                case AVAILABLE_USERS_REQUEST:
-                    HandleAvailableUsersRequest();
+                case TCP_constants.LOGOUT_REQUEST:
+
                     break;
-                case FRIEND_REQUEST:
-                    uName = GetUsernameFromMsg(incomingMessage);
-                    HandleFriendRequest(sender, uName);
+                case TCP_constants.GET_AVAILABLE_USERS_REQUEST:
+
                     break;
-                case CLIENT_DATA_ACCESS_REQUEST:
-                    uName = GetUsernameFromMsg(incomingMessage);
-                    client_attributes = GetAttributesToAccessFromMsg(incomingMessage);
-                    HandleDataAccessRequest(uName, client_attributes);
+                case TCP_constants.FRIEND_REQUEST:
+
                     break;
-                case FORWARD_MESSAGE_REQUEST:
-                    uName = GetUsernameFromMsg(incomingMessage);
-                    HandleForwardingOfMessage(uName);
+                case TCP_constants.GET_FRIENDS_STATUS_REQUEST:
+
                     break;
-                case default(int):
+                case TCP_constants.GET_CLIENT_DATA_ACCESS_REQUEST:
+
+                    break;
+                case TCP_constants.FORWARD_MESSAGE_REQUEST:
+
+                    break;
+                case TCP_constants.SERVER_MESSAGE:
+                case TCP_constants.INVALID_REQUEST:
+
                     break;
             }
         }
@@ -216,23 +191,6 @@ namespace Async_TCP_server_networking
         private void HandleAvailableUsersRequest()
         {
             throw new NotImplementedException();
-        }
-
-        private void AddClientRequest(TCP_message msg)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ExecuteClientRequest()
-        {
-            while(true)
-            {
-                if(clientRequestList.Count != 0 || clientRequestList == null)
-                {
-                    ParseClientRequest(clientRequestList.First());
-                    clientRequestList.RemoveAt(0);
-                }
-            }
         }
 
         private void HandleFriendRequest(Socket sender, string uName)
