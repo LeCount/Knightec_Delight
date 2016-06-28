@@ -147,8 +147,8 @@ namespace Async_TCP_server_networking
                 if (clientRequestList.Count != 0 || clientRequestList == null)
                 {
                     HandleClientRequest(clientRequestList.ElementAt(0));
-                    clientRequestList.RemoveAt(0);
-                    serverWindow.RemoveNextRequestText();
+                    //clientRequestList.RemoveAt(0);
+                    //serverWindow.RemoveNextRequestText();
                 }
             }
         }
