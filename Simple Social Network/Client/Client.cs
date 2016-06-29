@@ -1,6 +1,7 @@
 ﻿using Shared_resources;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -12,23 +13,24 @@ namespace Async_TCP_client_networking
 {
     public class Client
     {
-        private Thread connectToServer = null;
-        //private Thread readMessages = null;
+        private Thread serverConnect = null;
+        private Thread readMessages = null;
 
         private string server_ip_addr = "?";
         private string client_ip_addr = "?";
         private int numOfBytesRead = 0;
         private bool connected;
 
-        private byte[] receiveBuffer = new byte[TCP_constants.BUFFER_SIZE];
+        private byte[] receiveBuffer = new byte[TCP_constant.BUFFER_SIZE];
         private Stream clientStream = null;
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
         
         private LoginWindow loginWindow = null;
         private AddUserWindow addUserWindow = null;
-        
 
+        Serializer s = new Serializer();
+        
         public Client()
         {
             init();
@@ -43,59 +45,81 @@ namespace Async_TCP_client_networking
             server_ip_addr = client_ip_addr; //this needs to be changed if a different computer is used!
 
             loginWindow.DisplayClientIpAddress(client_ip_addr);
+            loginWindow.DisplayServerAvailability("Server status: Unavailable ");
 
             InitialCheckOfNetworkStatus();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
 
-            ClientStart();
+            serverConnect = new Thread(ConnectToServer);
+            serverConnect.Start();
 
-            Thread.Sleep(1000);
-
-            TCP_message msg = new TCP_message();
-            msg.type = TCP_constants.LOGIN_REQUEST;
-            msg.source = client_ip_addr;
-            msg.destination = "SERVER";
-            Client_send(msg);
+            readMessages = new Thread(Client_read);
+            readMessages.Start();
 
             loginWindow.ShowDialog();
             addUserWindow.ShowDialog();
             addUserWindow.Visible = false;
         }
 
-        private void ClientStart()
+        private void ConnectToServer()
         {
-            connectToServer = new Thread(TryConnectToServer);
-            connectToServer.Start();
-
-            //readMessages = new Thread(Client_read);
-            //readMessages.Start();
-        }
-
-        public void ClientStop()
-        {
-            connectToServer.Abort();
-            //readMessages.Abort();
-        }
-
-        private void TryConnectToServer()
-        {
-            while (connected == false)
+            while (!connected)
             {
                 try
                 {
-                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_constants.SERVER_PORT);
-                    
+                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_constant.SERVER_PORT);
                     clientStream = TCP_Client.GetStream();
+                    loginWindow.DisplayServerAvailability("Server status: Available");
                     connected = true;
-                    loginWindow.ChangeServerAvailability("Server status: Available");
                 }
 
-                catch(Exception)
+                catch (Exception)
                 {
-                    loginWindow.ChangeServerAvailability("Server status: Unavailable ");
+                    loginWindow.DisplayServerAvailability("Server status: Unavailable ");
                 }
             }
+        }
+
+        public void SendJoinRequest(string username, string password, string mailaddress)
+        {
+            TCP_message msg_send = new TCP_message();
+            msg_send.type = TCP_constant.JOIN_REQUEST;
+            msg_send.source = TCP_networking.GetIP();
+            msg_send.destination = "SERVER";
+
+            msg_send.AddTextAttribute(username);
+            msg_send.AddTextAttribute(password);
+            msg_send.AddTextAttribute(mailaddress);
+
+            Client_send(msg_send);
+        }
+
+        public void Client_read()
+        {
+            while (true)
+            {
+                try
+                {
+                    numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_constant.BUFFER_SIZE);
+
+                    if (numOfBytesRead > 0)
+                    {
+                        TCP_message msg = s.Deserialize_msg(receiveBuffer);
+                        
+                        MessageBox.Show("From: " + msg.source +
+                            "\nType: " + TCP_constant.GetRequestTypeAsText(msg.type), "Server reply");
+
+                        HandleServerReply(msg);
+                    }
+                }
+                catch (Exception) { }
+            }
+        }
+
+        private void HandleServerReply(TCP_message msg)
+        {
+            return;
         }
 
         public void InitialCheckOfNetworkStatus()
@@ -119,34 +143,25 @@ namespace Async_TCP_client_networking
             throw new NotImplementedException();
         }
 
-        private void Client_read()
-        {
-            Serializer s = new Serializer();
-
-            while (true)
-            {
-                numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_constants.BUFFER_SIZE);
-
-                if (numOfBytesRead > 0)
-                {
-                    TCP_message msg = s.Deserialize_msg(receiveBuffer);
-                    MessageBox.Show("Source: " + msg.source + "Type: " + msg.type);
-                }
-            }
-        }
-
         public void Client_send(TCP_message msg)
         {
             Serializer s = new Serializer();
             
             byte[] byteBuffer = s.Serialize_msg(msg);
-            clientStream.Write(byteBuffer, 0, byteBuffer.Length);
+            try { clientStream.Write(byteBuffer, 0, byteBuffer.Length); }
+            catch (Exception) { }
         }
 
         public void Disconnect()
         {
             //send request to disconnect to server
             ClientStop();
+        }
+
+        public void ClientStop()
+        {
+            serverConnect.Abort();
+            readMessages.Abort();
         }
 
         public void ShowLoginWindow()

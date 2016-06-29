@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Shared_resources;
+using System.Windows.Forms;
 
 namespace Async_TCP_client_networking
 {
@@ -32,6 +33,25 @@ namespace Async_TCP_client_networking
         {
             this.Visible = false;
             clientNetworking.ShowLoginWindow();
+        }
+
+        private void textBox_username_TextChanged(object sender, System.EventArgs e)
+        {
+            this.btn_submit.Enabled = true;
+        }
+
+        private void btn_submit_Click(object sender, System.EventArgs e)
+        {
+            this.btn_submit.Enabled = false;
+
+            clientNetworking.SendJoinRequest(textBox_username.Text, textBox_password.Text, textBox_mail.Text);
+
+            this.Visible = false;
+            clientNetworking.ShowLoginWindow();
+
+            textBox_username.Clear();
+            textBox_password.Clear();
+            textBox_mail.Clear();
         }
     }
 }

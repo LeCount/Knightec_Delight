@@ -7,14 +7,11 @@ namespace ServerDBCommunication
     public class ServerDatabase
     {
         private SQLiteConnection DBconnection;
-        private SQLiteCommand query;
+        //private SQLiteCommand query;
 
         public ServerDatabase() { }
 
-        public ServerDatabase(string dbFile)
-        {
-            Connect(dbFile);
-        }
+        public ServerDatabase(string dbFile){Connect(dbFile);}
 
         private void Connect(string dbFile)
         {
@@ -26,9 +23,7 @@ namespace ServerDBCommunication
             catch(Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message);
-            }
-
-            
+            }      
         }
 
         public void Disconnect()
@@ -36,20 +31,25 @@ namespace ServerDBCommunication
             DBconnection.Close();
         }
 
-        public void AddUser(string uName, string pWord)
+        internal void AddNewUser(string suggested_username, string suggested_password, string suggested_email)
         {
-            query = new SQLiteCommand();
-            query.Connection = DBconnection;
-            query.CommandText = "INSERT INTO Login (Username, Password) VALUES (@Username, @Password)";
-
-            query.CommandType = CommandType.Text;
-
-            query.Parameters.AddWithValue("@Username", uName);
-            query.Parameters.AddWithValue("@Password",pWord);
-            
-            query.ExecuteNonQuery();
-
-            Disconnect();
+            return;
         }
+
+        //public void AddUser(string uName, string pWord)
+        //{
+        //    query = new SQLiteCommand();
+        //    query.Connection = DBconnection;
+        //    query.CommandText = "INSERT INTO Login (Username, Password) VALUES (@Username, @Password)";
+
+        //    query.CommandType = CommandType.Text;
+
+        //    query.Parameters.AddWithValue("@Username", uName);
+        //    query.Parameters.AddWithValue("@Password",pWord);
+
+        //    query.ExecuteNonQuery();
+
+        //    Disconnect();
+        //}
     }
 }

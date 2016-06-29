@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared_resources;
+using System;
 using System.Windows.Forms;
 
 namespace Async_TCP_client_networking
@@ -35,7 +36,7 @@ namespace Async_TCP_client_networking
                 this.lbl_network.Text = text;
             }
 
-            DisplayClientIpAddress("Client ip address: " + text);
+            DisplayClientIpAddress(TCP_networking.GetIP());
         }
 
         public void DisplayClientIpAddress(string text)
@@ -50,18 +51,18 @@ namespace Async_TCP_client_networking
             }
             else
             {
-                this.lbl_ip_addr.Text = text;
+                this.lbl_ip_addr.Text = "Client ip address: " + text;
             }
         }
 
-        public void ChangeServerAvailability(string text)
+        public void DisplayServerAvailability(string text)
         {
             // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(ChangeServerAvailability);
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayServerAvailability);
                 this.Invoke(delegateMethod, new object[] { text });
             }
             else
@@ -80,6 +81,11 @@ namespace Async_TCP_client_networking
         {
             this.Visible = false;
             clientNetworking.ShowAddUserWindow();
+        }
+
+        private void btn_login_Click(object sender, EventArgs e)
+        {
+            //clientNetworking.GainLogin();
         }
     }
 }

@@ -80,6 +80,15 @@
     <Compile Include="LoginWindow.Designer.cs">
       <DependentUpon>LoginWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="obj\x86\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\x86\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\x86\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="obj\x86\Release\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\x86\Release\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\x86\Release\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="OnlineUserWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +103,14 @@
     <EmbeddedResource Include="LoginWindow.resx">
       <DependentUpon>LoginWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="obj\Debug\Client.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\Debug\ClientTcpCommunication.AddUserWindow.resources" />
+    <EmbeddedResource Include="obj\Debug\ClientTcpCommunication.LoginWindow.resources" />
+    <EmbeddedResource Include="obj\Debug\ClientTcpCommunication.OnlineUserWindow.resources" />
+    <EmbeddedResource Include="obj\x86\Release\Client.Properties.Resources.resources" />
+    <EmbeddedResource Include="obj\x86\Release\ClientTcpCommunication.AddUserWindow.resources" />
+    <EmbeddedResource Include="obj\x86\Release\ClientTcpCommunication.LoginWindow.resources" />
+    <EmbeddedResource Include="obj\x86\Release\ClientTcpCommunication.OnlineUserWindow.resources" />
     <EmbeddedResource Include="OnlineUserWindow.resx">
       <DependentUpon>OnlineUserWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +123,19 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="bin\Debug\Client.exe.config" />
+    <None Include="bin\Debug\Client.vshost.exe.config" />
+    <None Include="bin\Debug\Client.vshost.exe.manifest" />
+    <None Include="bin\x86\Debug\Client.exe.config" />
+    <None Include="bin\x86\Release\Client.exe.config" />
+    <None Include="bin\x86\Release\Client.vshost.exe.config" />
+    <None Include="bin\x86\Release\Client.vshost.exe.manifest" />
+    <None Include="obj\Debug\Client.csproj.GenerateResource.Cache" />
+    <None Include="obj\Debug\Client.csprojResolveAssemblyReference.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\x86\Release\Client.csproj.GenerateResource.Cache" />
+    <None Include="obj\x86\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -118,6 +148,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Client.exe" />
+    <Content Include="bin\Debug\Client.pdb" />
+    <Content Include="bin\Debug\Client.vshost.exe" />
+    <Content Include="bin\x86\Debug\Client.exe" />
+    <Content Include="bin\x86\Debug\Client.pdb" />
+    <Content Include="bin\x86\Release\Client.exe" />
+    <Content Include="bin\x86\Release\Client.pdb" />
+    <Content Include="bin\x86\Release\Client.vshost.exe" />
+    <Content Include="obj\Debug\Client.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\Client.exe" />
+    <Content Include="obj\Debug\Client.pdb" />
+    <Content Include="obj\x86\Release\Client.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\x86\Release\Client.exe" />
+    <Content Include="obj\x86\Release\Client.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="obj\x86\Release\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

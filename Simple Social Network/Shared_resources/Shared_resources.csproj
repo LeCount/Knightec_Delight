@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TCP_constants.cs" />
+    <Compile Include="TCP_constant.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="TCP_message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,29 +14,29 @@ namespace Shared_resources
 
         public TCP_message()
         {
-            type = TCP_constants.INVALID_REQUEST;
+            type = TCP_constant.INVALID_REQUEST;
             source = null;
             destination = null;
             textAttributes = new List<string>();
             boolAttributes = new List<bool>();
         }
 
-        private List<string> GetTextAttributes()
+        public List<string> GetTextAttributes()
         {
             return textAttributes;
         }
 
-        private void AddTextAttribute(string str)
+        public void AddTextAttribute(string str)
         {
             textAttributes.Add(str);
         }
 
-        private List<bool> GetBoolAttributes()
+        public List<bool> GetBoolAttributes()
         {
             return boolAttributes;
         }
 
-        private void AddBoolAttribute(bool b)
+        public void AddBoolAttribute(bool b)
         {
             boolAttributes.Add(b);
         }

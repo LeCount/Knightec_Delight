@@ -66,11 +66,12 @@ namespace Async_TCP_server_networking
             if (this.InvokeRequired)
             {
                 RemoveTextFromListHanler delegateMethod = new RemoveTextFromListHanler(RemoveNextRequestText);
-                this.Invoke(delegateMethod, new object[] {  });
+                this.Invoke(delegateMethod);
             }
             else
             {
-                this.listBox_requests.Items.RemoveAt(0);
+                if(listBox_requests.Items.Count > 0)
+                    this.listBox_requests.Items.RemoveAt(0);
             }
         }
 
