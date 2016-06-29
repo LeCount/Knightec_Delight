@@ -1,13 +1,13 @@
-﻿using Shared_resources;
-using System;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Shared_resources;
+
 
 namespace Async_TCP_client_networking
 {
@@ -34,6 +34,9 @@ namespace Async_TCP_client_networking
         public Client()
         {
             init();
+
+            TCP_message a = new TCP_message();
+
         }
 
         private void init()
@@ -81,20 +84,6 @@ namespace Async_TCP_client_networking
             }
         }
 
-        public void SendJoinRequest(string username, string password, string mailaddress)
-        {
-            TCP_message msg_send = new TCP_message();
-            msg_send.type = TCP_constant.JOIN_REQUEST;
-            msg_send.source = TCP_networking.GetIP();
-            msg_send.destination = "SERVER";
-
-            msg_send.AddTextAttribute(username);
-            msg_send.AddTextAttribute(password);
-            msg_send.AddTextAttribute(mailaddress);
-
-            Client_send(msg_send);
-        }
-
         public void Client_read()
         {
             while (true)
@@ -107,7 +96,8 @@ namespace Async_TCP_client_networking
                     {
                         TCP_message msg = s.Deserialize_msg(receiveBuffer);
                         
-                        MessageBox.Show("From: " + msg.source +
+                        MessageBox.Show("From: " + msg.source + 
+                            "\nId: " + TCP_constant.GetRequestTypeAsText(msg.type) +
                             "\nType: " + TCP_constant.GetRequestTypeAsText(msg.type), "Server reply");
 
                         HandleServerReply(msg);
@@ -120,6 +110,21 @@ namespace Async_TCP_client_networking
         private void HandleServerReply(TCP_message msg)
         {
             return;
+        }
+
+        public void SendJoinRequest(string username, string password, string mailaddress)
+        {
+
+
+            TCP_message msg_send = new TCP_message();
+            msg_send.source = TCP_networking.GetIP();
+            msg_send.destination = "SERVER";
+
+            msg_send.AddTextAttribute(username);
+            msg_send.AddTextAttribute(password);
+            msg_send.AddTextAttribute(mailaddress);
+
+            Client_send(msg_send);
         }
 
         public void InitialCheckOfNetworkStatus()
@@ -144,9 +149,7 @@ namespace Async_TCP_client_networking
         }
 
         public void Client_send(TCP_message msg)
-        {
-            Serializer s = new Serializer();
-            
+        {   
             byte[] byteBuffer = s.Serialize_msg(msg);
             try { clientStream.Write(byteBuffer, 0, byteBuffer.Length); }
             catch (Exception) { }

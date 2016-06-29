@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SQLite; //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
-using System.Data;
 
 namespace ServerDBCommunication
 {

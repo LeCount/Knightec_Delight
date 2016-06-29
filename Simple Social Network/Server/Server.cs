@@ -7,34 +7,29 @@ using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
 using Shared_resources;
-using System.Text;
-using System.Collections;
-using System.Windows.Forms;
 
 namespace Async_TCP_server_networking
 {
     public class Server
     {
         private Thread connect_listener = null;
-        private Thread requestListener = null;
-        private Thread requestResponder = null;
-
-        Hashtable hashTblOfSocketById = new Hashtable();
-        Hashtable socket_table_by_username = new Hashtable();
-
         private List<Thread> all_active_client_threads = new List<Thread>();
 
-        private TcpListener TCPListener = null;
+        private TcpListener TCP_listener = null;
 
         private ServerWindow serverWindow = null;
-        private ServerDatabase db = new ServerDatabase(TCP_constant.DATABASE_FILE);
+        private ServerDatabase db = new ServerDatabase(TCP_const.DATABASE_FILE);
 
         Serializer server_serializer = new Serializer();
+
         private List<Socket> all_active_client_sockets = new List<Socket>();
 
         public Server()
         {
             init();
+
+            TCP_message a = new TCP_message();
+            a.GetMyShitFFS();
         }
 
         private void init()
@@ -44,7 +39,7 @@ namespace Async_TCP_server_networking
 
             serverWindow.Text = "Server           " +
                                 "#IP Address: " + TCP_networking.GetIP() + "           " +
-                                "#Port: " + TCP_constant.SERVER_PORT + "           " + 
+                                "#Port: " + TCP_const.SERVER_PORT + "           " + 
                                 "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
@@ -54,8 +49,8 @@ namespace Async_TCP_server_networking
 
         public void ServerStart()
         {
-            TCPListener = new TcpListener(IPAddress.Parse(TCP_networking.GetIP()), TCP_constant.SERVER_PORT);
-            TCPListener.Start();
+            TCP_listener = new TcpListener(IPAddress.Parse(TCP_networking.GetIP()), TCP_const.SERVER_PORT);
+            TCP_listener.Start();
 
             connect_listener = new Thread(ListenForConnectRequest);
             connect_listener.Start();
@@ -64,7 +59,7 @@ namespace Async_TCP_server_networking
         public void ServerStop()
         {
             connect_listener.Abort();
-            TCPListener.Stop();
+            TCP_listener.Stop();
 
             foreach(Thread curr in all_active_client_threads)
             {
@@ -111,8 +106,8 @@ namespace Async_TCP_server_networking
 
             while (true)
             {
-                while (!TCPListener.Pending()) { }     
-                s = TCPListener.AcceptSocket();
+                while (!TCP_listener.Pending()) { }     
+                s = TCP_listener.AcceptSocket();
                 all_active_client_sockets.Add(s);
                 serverWindow.AddServerLog("New client has established connection with server.");
                 ListenOnSocket(s);
@@ -136,7 +131,7 @@ namespace Async_TCP_server_networking
             List<TCP_message> request_list = new List<TCP_message>();
             Socket s = (Socket)client_socket; 
             int numOfBytesRead = 0;
-            byte[] receiveBuffer = new byte[TCP_constant.BUFFER_SIZE];
+            byte[] receiveBuffer = new byte[TCP_const.BUFFER_SIZE];
             
             while (true)
             {
@@ -153,7 +148,7 @@ namespace Async_TCP_server_networking
 
                             request_list.Add(msg);
 
-                            string request_as_text = string.Format("{0} From: '{1}' To: '{2}'", TCP_constant.GetRequestTypeAsText(msg.type), msg.source, msg.destination);
+                            string request_as_text = string.Format("{0} From: '{1}' To: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
                             serverWindow.DisplayRequestInListbox(request_as_text);
                         }
 
@@ -172,7 +167,7 @@ namespace Async_TCP_server_networking
 
         private bool MessageWasMeantForServer(TCP_message msg)
         {
-            if (msg.type != TCP_constant.INVALID_REQUEST || msg.type != TCP_constant.SERVER_REPLY)
+            if (msg.id == TCP_const.REQUEST && msg.type != TCP_const.INVALID)
                 return true;
             else
                 return false;
@@ -180,14 +175,14 @@ namespace Async_TCP_server_networking
 
         private void HandleClientRequest(TCP_message msg, Socket s)
         {
-            switch(msg.type)
+            switch(msg.id)
             {
-                case TCP_constant.JOIN_REQUEST:
+                case TCP_const.JOIN:
 
                     HandleJoinRequest(msg, s);
 
                     break;
-                case TCP_constant.LOGIN_REQUEST:
+                case TCP_const.LOGIN:
 
                     //Username exists?
                     //IP address confirmed?
@@ -199,35 +194,29 @@ namespace Async_TCP_server_networking
                     //Broadcast event to all other users online.
 
                     break;
-                case TCP_constant.LOGOUT_REQUEST:
+                case TCP_const.LOGOUT:
 
                     //Acknowledge client.
                     //Close client socket.
                     //Broadcast event to all other users online.
 
                     break;
-                case TCP_constant.GET_AVAILABLE_USERS_REQUEST:
+                case TCP_const.GET_USERS:
 
                     //Send list of all usernames to client.
 
                     break;
-                case TCP_constant.FRIEND_REQUEST:
+                case TCP_const.ADD_FRIEND:
 
                     //Forward request to the requested client.
 
                     break;
-                case TCP_constant.FRIEND_REQUEST_REPLY:
-
-                    //If reply is marked 'Accept friend request', mark users as friends in database.
-                    //Forward request to the requested client.
-
-                    break;
-                case TCP_constant.GET_FRIENDS_STATUS_REQUEST:
+                case TCP_const.GET_FRIENDS_STATUS:
 
                     //Send friend list to client, marked whether they are online or not.
 
                     break;
-                case TCP_constant.GET_CLIENT_DATA_ACCESS_REQUEST:
+                case TCP_const.GET_CLIENT_DATA:
 
                     //If requested data is marked 'Public', send data to client.
                     //Else if marked private, check database if clients are friends.
@@ -235,15 +224,13 @@ namespace Async_TCP_server_networking
                         //Else deny client access.
 
                     break;
-                case TCP_constant.FORWARD_MESSAGE_REQUEST:
+                case TCP_const.SEND_MESSAGE:
 
                     //Check database if clients are friends.
                     //If so, forward message to the requested client.
 
                     break;
-                case TCP_constant.SERVER_REPLY:
-                case TCP_constant.INVALID_REQUEST:
-                case TCP_constant.JOIN_REQUEST_REPLY:
+                case TCP_const.INVALID:
 
                     //Ignore this message.
 
@@ -259,13 +246,14 @@ namespace Async_TCP_server_networking
             bool validJoinRequest = true; 
 
             TCP_message reply = new TCP_message();
-            reply.type = TCP_constant.JOIN_REQUEST_REPLY;
+            reply.id = TCP_const.JOIN;
+            reply.type = TCP_const.REPLY;
             reply.source = "SERVER";
             reply.destination = msg.source;
 
             string suggested_username = (msg.textAttributes.ElementAt(0));
             string suggested_password = (msg.textAttributes.ElementAt(1));
-            string suggested_email = (msg.textAttributes.ElementAt(2));
+            string suggested_email =    (msg.textAttributes.ElementAt(2));
 
             reply.AddTextAttribute(suggested_username);
             reply.AddTextAttribute(suggested_password);
