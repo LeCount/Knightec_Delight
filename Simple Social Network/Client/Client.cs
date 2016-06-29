@@ -37,6 +37,7 @@ namespace Async_TCP_client_networking
 
             TCP_message a = new TCP_message();
 
+
         }
 
         private void init()
