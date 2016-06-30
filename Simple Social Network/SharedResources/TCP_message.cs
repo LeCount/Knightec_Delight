@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Shared_resources
+namespace SharedResources
 {
     [Serializable]
     public class TCP_message

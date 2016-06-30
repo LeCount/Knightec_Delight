@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
-using Shared_resources;
+using SharedResources;
 
 namespace Async_TCP_server_networking
 {
@@ -29,7 +29,6 @@ namespace Async_TCP_server_networking
             init();
 
             TCP_message a = new TCP_message();
-            a.GetMyShitFFS();
         }
 
         private void init()

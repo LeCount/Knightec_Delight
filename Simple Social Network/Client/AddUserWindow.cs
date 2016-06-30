@@ -1,4 +1,4 @@
-﻿using Shared_resources;
+﻿using SharedResources;
 using System.Windows.Forms;
 
 namespace Async_TCP_client_networking

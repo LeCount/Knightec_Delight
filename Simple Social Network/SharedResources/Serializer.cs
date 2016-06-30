@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
-namespace Shared_resources
+namespace SharedResources
 {
     public class Serializer
     {

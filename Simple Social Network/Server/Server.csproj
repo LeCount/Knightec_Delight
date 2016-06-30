@@ -53,6 +53,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharedResources">
+      <HintPath>..\SharedResources\bin\Debug\SharedResources.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.101.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -104,12 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Shared_resources\Shared_resources.csproj">
-      <Project>{4F6CB058-43C2-41BB-858C-8161B78537C6}</Project>
-      <Name>Shared_resources</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

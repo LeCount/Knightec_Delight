@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 
-namespace Shared_resources
+namespace SharedResources
 {
     public static class TCP_networking
     {

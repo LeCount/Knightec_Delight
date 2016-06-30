@@ -1,4 +1,4 @@
-﻿using Shared_resources;
+﻿using SharedResources;
 using System;
 using System.Windows.Forms;
 

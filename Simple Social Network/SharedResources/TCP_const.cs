@@ -1,4 +1,4 @@
-﻿namespace Shared_resources
+﻿namespace SharedResources
 {
     public static class TCP_const
     {  

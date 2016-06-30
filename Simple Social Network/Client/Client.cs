@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Shared_resources;
+using SharedResources;
 
 
 namespace Async_TCP_client_networking
@@ -21,7 +21,7 @@ namespace Async_TCP_client_networking
         private int numOfBytesRead = 0;
         private bool connected;
 
-        private byte[] receiveBuffer = new byte[TCP_constant.BUFFER_SIZE];
+        private byte[] receiveBuffer = new byte[TCP_const.BUFFER_SIZE];
         private Stream clientStream = null;
         private TcpClient TCP_Client = new TcpClient();
         private ASCIIEncoding asciiEncode = new ASCIIEncoding();
@@ -34,10 +34,6 @@ namespace Async_TCP_client_networking
         public Client()
         {
             init();
-
-            TCP_message a = new TCP_message();
-
-
         }
 
         private void init()
@@ -72,7 +68,7 @@ namespace Async_TCP_client_networking
             {
                 try
                 {
-                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_constant.SERVER_PORT);
+                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_const.SERVER_PORT);
                     clientStream = TCP_Client.GetStream();
                     loginWindow.DisplayServerAvailability("Server status: Available");
                     connected = true;
@@ -91,15 +87,15 @@ namespace Async_TCP_client_networking
             {
                 try
                 {
-                    numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_constant.BUFFER_SIZE);
+                    numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_const.BUFFER_SIZE);
 
                     if (numOfBytesRead > 0)
                     {
                         TCP_message msg = s.Deserialize_msg(receiveBuffer);
                         
                         MessageBox.Show("From: " + msg.source + 
-                            "\nId: " + TCP_constant.GetRequestTypeAsText(msg.type) +
-                            "\nType: " + TCP_constant.GetRequestTypeAsText(msg.type), "Server reply");
+                            "\nId: " + TCP_const.IntToText(msg.type) +
+                            "\nType: " + TCP_const.IntToText(msg.type), "Server reply");
 
                         HandleServerReply(msg);
                     }

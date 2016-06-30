@@ -1,0 +1,5 @@
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\SharedResources\bin\Debug\SharedResources.dll
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\SharedResources\bin\Debug\SharedResources.pdb
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\SharedResources\obj\Debug\SharedResources.csprojResolveAssemblyReference.cache
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\SharedResources\obj\Debug\SharedResources.dll
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\SharedResources\obj\Debug\SharedResources.pdb
