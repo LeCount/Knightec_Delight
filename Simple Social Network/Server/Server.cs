@@ -27,8 +27,6 @@ namespace Async_TCP_server_networking
         public Server()
         {
             init();
-
-            TCP_message a = new TCP_message();
         }
 
         private void init()
@@ -110,6 +108,7 @@ namespace Async_TCP_server_networking
                 all_active_client_sockets.Add(s);
                 serverWindow.AddServerLog("New client has established connection with server.");
                 ListenOnSocket(s);
+
             }
         }
 
@@ -147,7 +146,7 @@ namespace Async_TCP_server_networking
 
                             request_list.Add(msg);
 
-                            string request_as_text = string.Format("{0} From: '{1}' To: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
+                            string request_as_text = string.Format("{0} REQUEST from: '{1}' to: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
                             serverWindow.DisplayRequestInListbox(request_as_text);
                         }
 
@@ -156,6 +155,8 @@ namespace Async_TCP_server_networking
                             HandleClientRequest(request_list.ElementAt(0), s);
                             request_list.RemoveAt(0);
                         }
+
+                        numOfBytesRead = 0;
                     }
                     catch (Exception) { }
                 }
@@ -166,7 +167,7 @@ namespace Async_TCP_server_networking
 
         private bool MessageWasMeantForServer(TCP_message msg)
         {
-            if (msg.id == TCP_const.REQUEST && msg.type != TCP_const.INVALID)
+            if (msg.type == TCP_const.REQUEST && msg.id != TCP_const.INVALID)
                 return true;
             else
                 return false;
@@ -266,7 +267,7 @@ namespace Async_TCP_server_networking
                 reply.AddBoolAttribute(false);
             }
 
-            if ( PasswordFormatValidation(suggested_password) )
+            if ( PasswordFormatIsValid(suggested_password) )
                 reply.AddBoolAttribute(true);
             else
             {
@@ -274,7 +275,7 @@ namespace Async_TCP_server_networking
                 reply.AddBoolAttribute(false);
             }
 
-            if (EmailValidation(suggested_email))
+            if (EmailIsValid(suggested_email))
                 reply.AddBoolAttribute(true);
             else
             {
@@ -295,12 +296,12 @@ namespace Async_TCP_server_networking
             return true;
         }
 
-        private bool PasswordFormatValidation(string suggested_password)
+        private bool PasswordFormatIsValid(string suggested_password)
         {
             return true;
         }
 
-        private bool EmailValidation(string suggested_email)
+        private bool EmailIsValid(string suggested_email)
         {
             return true;
         }

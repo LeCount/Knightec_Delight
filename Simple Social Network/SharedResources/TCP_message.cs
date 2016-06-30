@@ -33,11 +33,6 @@ namespace SharedResources
             textAttributes.Add(str);
         }
 
-        public int GetMyShitFFS()
-        {
-            return id;
-        }
-
         public List<bool> GetBoolAttributes()
         {
             return boolAttributes;
