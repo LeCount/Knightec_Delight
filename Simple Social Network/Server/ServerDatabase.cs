@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Data.SQLite; //http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
+using System.Data;
+using System.Data.SQLite;
 
 namespace ServerDBCommunication
 {
     public class ServerDatabase
     {
-        private SQLiteConnection DBconnection;
-        //private SQLiteCommand query;
+        private SQLiteConnection DBconnection = null;
+        private SQLiteCommand query = null;
 
-        public ServerDatabase() { }
+        public ServerDatabase() {}
 
-        public ServerDatabase(string dbFile){Connect(dbFile);}
+        public ServerDatabase(string dbFile)
+        {
+
+            Connect(dbFile);   
+        }
 
         private void Connect(string dbFile)
         {
@@ -18,6 +23,7 @@ namespace ServerDBCommunication
             {
                 DBconnection = new SQLiteConnection("Data Source = serverDB.db;Version=3;");
                 DBconnection.Open();
+
             }
             catch(Exception e)
             {
@@ -30,9 +36,32 @@ namespace ServerDBCommunication
             DBconnection.Close();
         }
 
-        internal void AddNewUser(string suggested_username, string suggested_password, string suggested_email)
+        internal void AddNewUser(string suggested_username, string suggested_password, string suggested_email, string code)
         {
             return;
+        }
+
+        public bool EntryExistsInTable(string entry, string table, string column)
+        {
+
+            query = new SQLiteCommand();
+            query.Connection = DBconnection;
+
+            SQLiteParameter param = new SQLiteParameter("@ENTRY", DbType.String) { Value = entry };
+
+            query.Parameters.Add(param);
+
+            query.CommandText = "SELECT COUNT (" + column.ToString() + ") FROM " + table.ToString() + " WHERE " + column.ToString() + " = @ENTRY";
+
+            string text = query.CommandText;
+
+            object obj = query.ExecuteScalar();
+            int occurrences = Convert.ToInt32(obj);
+
+            if (occurrences > 0)
+                return false;
+            else
+                return true;
         }
 
         //public void AddUser(string uName, string pWord)

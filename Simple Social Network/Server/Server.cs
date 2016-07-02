@@ -7,6 +7,9 @@ using System.Threading;
 using ServerDBCommunication;
 using System.Linq;
 using SharedResources;
+using System.Data;
+using System.Net.Mail;
+using System.Windows.Forms;
 
 namespace Async_TCP_server_networking
 {
@@ -138,27 +141,27 @@ namespace Async_TCP_server_networking
                     try
                     {
                         numOfBytesRead = s.Receive(receiveBuffer);
-
-                        if (numOfBytesRead > 0)
-                        {
-                            TCP_message msg = server_serializer.Deserialize_msg(receiveBuffer);
-                            serverWindow.AddServerLog("Request received from: " + msg.source);
-
-                            request_list.Add(msg);
-
-                            string request_as_text = string.Format("{0} REQUEST from: '{1}' to: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
-                            serverWindow.DisplayRequestInListbox(request_as_text);
-                        }
-
-                        if ((request_list != null || request_list.Count > 0) && (MessageWasMeantForServer(request_list.ElementAt(0))))
-                        {
-                            HandleClientRequest(request_list.ElementAt(0), s);
-                            request_list.RemoveAt(0);
-                        }
-
-                        numOfBytesRead = 0;
                     }
                     catch (Exception) { }
+
+                    if (numOfBytesRead > 0)
+                    {
+                        TCP_message msg = server_serializer.Deserialize_msg(receiveBuffer);
+                        serverWindow.AddServerLog("Request received from: " + msg.source);
+
+                        request_list.Add(msg);
+
+                        string request_as_text = string.Format("{0} REQUEST from: '{1}' to: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
+                        serverWindow.DisplayRequestInListbox(request_as_text);
+                    }
+
+                    if ((request_list != null || request_list.Count > 0) && (MessageWasMeantForServer(request_list.ElementAt(0))))
+                    {
+                        HandleClientRequest(request_list.ElementAt(0), s);
+                        request_list.RemoveAt(0);
+                    }
+
+                    numOfBytesRead = 0;
                 }
                 else
                     s.Close();
@@ -286,25 +289,97 @@ namespace Async_TCP_server_networking
             //Add username, password and email to database.
             //Generate a confirmation code and save it in database, and send it to the user's email.
             if (validJoinRequest == true)
-                db.AddNewUser(suggested_username, suggested_password, suggested_email);
+            {
+                string code = null;
+                code = GeneratConfirmationCode();
+                SendEmailTo(suggested_email, code);
+                db.AddNewUser(suggested_username, suggested_password, suggested_email, code);
+                
+            }
 
             Server_send(reply, s);
         }
 
+        private void SendEmailTo(string suggested_email, string code)
+        {
+            MailMessage msg = new MailMessage();
+
+            msg.From = new MailAddress("server.test@gmail.com", "TORSK");
+            msg.To.Add("stefan.danielsson.1989@gmail.com");
+            msg.Subject = "Email verfication";
+            msg.Body = code;
+            //msg.Priority = MailPriority.High;
+
+
+            using (SmtpClient client = new SmtpClient())
+            {
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("stefan.danielsson.1989@gmail.com", "klantarselE89");
+                client.Host = "smtp.gmail.com";
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                client.Send(msg);
+            }
+        }
+
+    private string GeneratConfirmationCode()
+        {
+            Random random = new Random();
+            int length = 10;
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghikolmnopqrstuvwxyz0123456789";
+
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         private bool UsernameIsUnique(string suggested_username)
         {
-            return true;
+            return db.EntryExistsInTable(suggested_username, "Clients", "username");
+            
         }
 
         private bool PasswordFormatIsValid(string suggested_password)
         {
-            return true;
+            int MIN_LENGTH = 5;
+            int MAX_LENGTH = 20;
+
+            if (suggested_password == null)
+                return false;
+
+            bool meetsLengthRequirements = suggested_password.Length >= MIN_LENGTH && suggested_password.Length <= MAX_LENGTH;
+
+            if (!meetsLengthRequirements)
+                return false;
+
+            bool hasUpperCaseLetter = false;
+            bool hasLowerCaseLetter = false;
+            int digitCounter = 0;
+
+            foreach (char c in suggested_password)
+            {
+                if (char.IsUpper(c)) hasUpperCaseLetter = true;
+                else if (char.IsLower(c)) hasLowerCaseLetter = true;
+                else if (char.IsDigit(c)) digitCounter ++;
+            }
+
+            if (hasUpperCaseLetter && hasLowerCaseLetter && digitCounter == 3)
+                return true;
+            else
+                return false;
         }
 
         private bool EmailIsValid(string suggested_email)
         {
-            return true;
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(suggested_email);
+                return addr.Address == suggested_email;
+            }
+            catch
+            {
+                return false;
+            }
         }
-
     }
 }
