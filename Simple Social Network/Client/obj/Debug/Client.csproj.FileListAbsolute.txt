@@ -9,3 +9,16 @@ C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Client\bin\
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Client\obj\Debug\Client.exe
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Client\obj\Debug\Client.pdb
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\bin\Debug\Client.exe.config
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\bin\Debug\Client.exe
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\bin\Debug\Client.pdb
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\bin\Debug\SharedResources.dll
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\bin\Debug\SharedResources.pdb
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Async_TCP_client_networking.AddUserWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Async_TCP_client_networking.LoginWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Async_TCP_client_networking.OnlineUserWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Client.exe
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Client\obj\Debug\Client.pdb

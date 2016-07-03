@@ -8,3 +8,6 @@ C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\bin\Debug\System.Data.SQLite.dll
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\Debug\ServerTcpCommunication.ServerWindow.resources
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\bin\Debug\Server.exe.config
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\obj\Debug\Server.exe
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\obj\Debug\Server.pdb

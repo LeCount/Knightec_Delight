@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{02530A16-F730-4F75-877B-4D8AA250267D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -23,8 +23,8 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|Any CPU.Build.0 = Debug|x86
 		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|x86.ActiveCfg = Debug|x86
 		{02530A16-F730-4F75-877B-4D8AA250267D}.Debug|x86.Build.0 = Debug|x86
 		{02530A16-F730-4F75-877B-4D8AA250267D}.Release|Any CPU.ActiveCfg = Release|Any CPU
