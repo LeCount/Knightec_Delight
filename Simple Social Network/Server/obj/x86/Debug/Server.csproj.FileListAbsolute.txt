@@ -8,19 +8,6 @@ C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.pdb
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\x86\Debug\ServerDBCommunication.ServerWindow.resources
 C:\Users\Glock\Desktop\Stefan\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.Properties.Resources.resources
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Async_TCP_server_networking.ServerWindow.resources
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.csproj.GenerateResource.Cache
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.exe.config
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.exe
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.pdb
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\SharedResources.dll
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\System.Data.SQLite.dll
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\SharedResources.pdb
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.exe
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.pdb
-C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Async_TCP_server_networking.SMTPClientWindow.resources
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\bin\x86\Debug\Server.exe.config
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\bin\x86\Debug\Server.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\bin\x86\Debug\Server.pdb
