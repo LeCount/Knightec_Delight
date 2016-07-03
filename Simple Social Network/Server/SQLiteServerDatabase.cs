@@ -4,14 +4,17 @@ using System.Data.SQLite;
 
 namespace ServerDBCommunication
 {
-    public class ServerDatabase
+    /// <summary>
+    /// A class responsible for database access (reading and writing) on the server side.
+    /// </summary>
+    public class SQLiteServerDatabase
     {
         private SQLiteConnection DBconnection = null;
         private SQLiteCommand query = null;
 
-        public ServerDatabase() {}
+        public SQLiteServerDatabase() {}
 
-        public ServerDatabase(string dbFile)
+        public SQLiteServerDatabase(string dbFile)
         {
 
             Connect(dbFile);   

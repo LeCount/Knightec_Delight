@@ -6,63 +6,64 @@ using System.Windows.Forms;
 
 namespace SharedResources
 {
+    /// <summary>
+    /// The TCP socket between the client and the server, sends information to eachother in the form of byte-arrays. 
+    /// This class is responsible for serializing and dezerializing the TcpMessage-class back and forth from byte-array format.
+    /// This way, the dataexchange over TCP can be more structured and easily accessed.
+    /// </summary>
     public class Serializer
     {
+        MemoryStream mem_stream = null;
+        BinaryFormatter bin_formater = new BinaryFormatter();
+
         public byte[] StreamToByteArray(Stream stream)
         {
-            byte[] byteArray = new byte[1024];
-            MemoryStream memStream = new MemoryStream();
             int bit;
+            byte[] byte_array = new byte[TcpConst.BUFFER_SIZE];
+            mem_stream = new MemoryStream();
 
-            while ((bit = stream.Read(byteArray, 0, byteArray.Length)) > 0)
+            while ((bit = stream.Read(byte_array, 0, byte_array.Length)) > 0)
             {
-                memStream.Write(byteArray, 0, bit);
+                mem_stream.Write(byte_array, 0, bit);
             }
 
-            return memStream.ToArray();
+            return mem_stream.ToArray();
         }
 
-        public Stream ByteArrayToStream(Byte[] byteArray)
+        public Stream ByteArrayToStream(Byte[] byte_array)
         {
-            return new MemoryStream(byteArray);
+            return new MemoryStream(byte_array);
         }
 
-        public byte[] Serialize_msg(TCP_message msg)
+        public byte[] SerializeMsg(TcpMessage msg)
         {
-            MemoryStream memStream = new MemoryStream();
-            BinaryFormatter binFormater = new BinaryFormatter();
+            mem_stream = new MemoryStream();
 
             try
             {
-                binFormater.Serialize(memStream, msg);
+                bin_formater.Serialize(mem_stream, msg);
+                return mem_stream.ToArray();
             }
-            catch (SerializationException e)
+            catch (Exception e)
             {
-                MessageBox.Show(e.Message);
-            }
-            catch (InvalidOperationException e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
-            return memStream.ToArray();
-        }
-
-        public TCP_message Deserialize_msg(byte[] byteArray)
-        {
-            MemoryStream memoryStream = new MemoryStream(byteArray);
-            BinaryFormatter binFormater = new BinaryFormatter();
-
-            try
-            {
-                return (TCP_message)binFormater.Deserialize(memoryStream);
-            }
-            catch (InvalidCastException e)
-            {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Could not serialize TcpMessage: " + e.Message);
                 return null;
             }
+        }
 
+        public TcpMessage DeserializeByteArray(byte[] byte_array)
+        {
+            mem_stream = new MemoryStream(byte_array);
+            
+            try
+            {
+                return (TcpMessage)bin_formater.Deserialize(mem_stream);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not deserialize byte-array: " + e.Message);
+                return null;
+            }
         }
     }
 }

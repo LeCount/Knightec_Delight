@@ -1,91 +1,127 @@
-﻿using SharedResources;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Async_TCP_client_networking
 {
+    /// <summary>
+    /// A form for providing the user with a login controll and a add-user-controll. 
+    /// But also to provide information regarding the status of the network, the status of the server, and the ip address of the client. 
+    /// </summary>
     public partial class LoginWindow : Form
     {
-        private static LoginWindow singletonInstance;
-        delegate void SetTextEventHandler(string text);
-        private Client clientNetworking = null;
+        /// <summary>A reference to a singleton based instance of the class.</summary>
+        private static LoginWindow singleton_instance;
 
+        /// <summary>
+        /// Declaration of a delegate method to be used for call-back, for setting text in this form from another thread; 
+        /// used to reference any method that has the same return-type and parameter-types.
+        /// </summary>
+        /// <param name="text">Delegate declaration parameter.</param>
+        private delegate void SetTextEventHandler(string text);
+
+        /// <summary>Reference to the calling client-class.</summary>
+        private Client client_networking = null;
+
+        /// <summary>Constructor 1; Initialize and setup the form's components.</summary>
         public LoginWindow() { InitializeComponent(); }
 
-        public LoginWindow(Client c)
+        /// <summary>Constructor 2; Initialize and setup the form's components, and set reference to calling client-class.</summary>
+        /// <param name="reference">Reference to the calling client-class.</param>
+        public LoginWindow(Client reference)
         {
-            clientNetworking = c;
+            client_networking = reference;
             InitializeComponent();
         }
 
-        public static LoginWindow getForm(Client c) { return singletonInstance = new LoginWindow(c); }
-        public static LoginWindow getForm() { return singletonInstance; }
+        /// <summary>Creates a singleton instance of this class.</summary>
+        /// <param name="reference">Reference to the calling client-class.</param>
+        /// <returns>Pointer to singleton instance of this class.</returns>
+        public static LoginWindow getForm(Client c) { return singleton_instance = new LoginWindow(c); }
 
+        /// <summary>Gets the singleton instance of this class.</summary>
+        /// <returns>Pointer to singleton instance of this class.</returns>
+        public static LoginWindow getForm() { return singleton_instance; }
+
+        /// <summary>Set the network availability lable in this form.</summary>
+        /// <param name="text">Text to be writen to the lable.</param>
         public void DisplayNetworkAvailability(string text)
         {
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
-            if (this.lbl_network.InvokeRequired)
+            if (lbl_network.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayNetworkAvailability);
-                this.Invoke(delegateMethod, new object[] { text });
+                SetTextEventHandler delegate_method = new SetTextEventHandler(DisplayNetworkAvailability);
+
+                //invoke the thread responsible for the lable
+                Invoke(delegate_method, new object[] { text });
             }
             else
-            {
-                this.lbl_network.Text = text;
-            }
+               lbl_network.Text = text;
 
-            DisplayClientIpAddress(TCP_networking.GetIP());
+            client_networking.GetClientIP();
         }
 
-        public void DisplayClientIpAddress(string text)
+        /// <summary>Set the ip address lable in this form.</summary>
+        /// <param name="text">Text to be writen to the lable.</param>
+        public void SetClientIpAddress(string text)
         {
             // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayClientIpAddress);
-                this.Invoke(delegateMethod, new object[] { text });
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(SetClientIpAddress);
+
+                //invoke the thread responsible for the lable
+                Invoke(delegateMethod, new object[] { text });
             }
             else
-            {
-                this.lbl_ip_addr.Text = "Client ip address: " + text;
-            }
+                lbl_ip_addr.Text = "Client ip address: " + text;
         }
 
-        public void DisplayServerAvailability(string text)
+        /// <summary>Set the server availability lable in this form.</summary>
+        /// <param name="text">Text to be writen to the lable.</param>
+        public void SetServerAvailability(string text)
         {
             // InvokeRequired  compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
             if (lbl_ip_addr.InvokeRequired)
             {
-                SetTextEventHandler delegateMethod = new SetTextEventHandler(DisplayServerAvailability);
-                this.Invoke(delegateMethod, new object[] { text });
+                SetTextEventHandler delegateMethod = new SetTextEventHandler(SetServerAvailability);
+
+                //invoke the thread responsible for the lable
+                Invoke(delegateMethod, new object[] { text });
             }
             else
-            {
-                this.lbl_server_connect.Text = text;
-            }
+                lbl_server_connect.Text = text;
         }
 
+        /// <summary>Overridden eventhandler, for when this form is closed or terminated.</summary>
+        /// <param name="e">Information regarding the event of closing of this form.</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            clientNetworking.ClientStop();
+            client_networking.Disconnect();
             System.Environment.Exit(1);
         }
 
+        /// <summary>Eventhandler for when button "New user" is clicked.</summary>
+        /// <param name="sender">The caller- class, invoking this method.</param>
+        /// <param name="e">Information regarding this event.</param>
         private void btn_new_user_Click_1(object sender, EventArgs e)
         {
-            this.Visible = false;
-            clientNetworking.ShowAddUserWindow();
+            Visible = false;
+            client_networking.ShowAddUserWindow();
         }
 
+        /// <summary>Eventhandler for when button "Login" is clicked.</summary>
+        /// <param name="sender">The caller- class, invoking this method.</param>
+        /// <param name="e">Information regarding this event.</param>
         private void btn_login_Click(object sender, EventArgs e)
         {
-            //clientNetworking.GainLogin();
+            //verify login on server
+            client_networking.SendLoginRequest();
         }
     }
 }

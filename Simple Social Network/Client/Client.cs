@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SharedResources;
@@ -11,130 +10,145 @@ using System.Linq;
 
 namespace Async_TCP_client_networking
 {
+    /// <summary>A class responsible for asynchronous TCP communication on the client side.</summary>
     public class Client
     {
-        private Thread serverConnect = null;
-        private Thread readMessages = null;
+        private LoginWindow login_window = null;
+        private AddUserWindow add_user_window = null;
+        private OnlineUserWindow online_window = null;
+        private Serializer s = new Serializer();
+
+        /// <summary>Thread responsible for connecting to the server.</summary>
+        private Thread server_connect = null;
+
+        /// <summary>Thread responsible for reading incoming messages on this client's socket.</summary>
+        private Thread message_read = null;
+
+        /// <summary>A stream providing read and write operations, on a given medium.</summary>
+        private Stream client_stream = null;
+
+        /// <summary>A medium for providing client connections for TCP network services.</summary>
+        private TcpClient tcp_client = new TcpClient();
+
+        /// <summary>A byte-array based buffer, where incoming messages are stored.</summary>
+        private byte[] receive_buffer = new byte[TcpConst.BUFFER_SIZE];
 
         private string server_ip_addr = "?";
         private string client_ip_addr = "?";
-        private int numOfBytesRead = 0;
+
+        /// <summary>Indication of whether this client is to be assumed connected to the server or not.</summary>
         private bool connected;
 
-        private byte[] receiveBuffer = new byte[TCP_const.BUFFER_SIZE];
-        private Stream clientStream = null;
-        private TcpClient TCP_Client = new TcpClient();
-        private ASCIIEncoding asciiEncode = new ASCIIEncoding();
-        
-        private LoginWindow loginWindow = null;
-        private AddUserWindow addUserWindow = null;
+        /// <summary>Default client constructor.</summary>
+        public Client() {Init();}
 
-        Serializer s = new Serializer();
-        
-        public Client()
+        /// <summary> Initialize the client, and start necessary threads.</summary>
+        private void Init()
         {
-            init();
-        }
+            login_window = LoginWindow.getForm(this);
+            add_user_window = AddUserWindow.getForm(this);
+            //online_window = OnlineUserWindow.getForm(this);
 
-        private void init()
-        {
-            loginWindow = LoginWindow.getForm(this);
-            addUserWindow = AddUserWindow.getForm(this);
-
-            client_ip_addr = TCP_networking.GetIP();
+            client_ip_addr = GetClientIP(); 
             server_ip_addr = client_ip_addr; //this needs to be changed if a different computer is used!
 
-            loginWindow.DisplayClientIpAddress(client_ip_addr);
-            loginWindow.DisplayServerAvailability("Server status: Unavailable ");
+            login_window.SetClientIpAddress(client_ip_addr);
+            login_window.SetServerAvailability("Server status: Unavailable ");
 
-            InitialCheckOfNetworkStatus();
+            SetInitialNetworkStatus();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
 
-            serverConnect = new Thread(ConnectToServer);
-            serverConnect.Start();
+            ClientStart();
 
-            readMessages = new Thread(Client_read);
-            readMessages.Start();
+            login_window.ShowDialog();
+            add_user_window.ShowDialog();
+            online_window.ShowDialog();
 
-            loginWindow.ShowDialog();
-            addUserWindow.ShowDialog();
-            addUserWindow.Visible = false;
+            add_user_window.Visible = false;
+            online_window.Visible = false;
         }
 
+        /// <summary>Try until success to connect to the server.</summary>
         private void ConnectToServer()
         {
             while (!connected)
             {
                 try
                 {
-                    TCP_Client.Connect(IPAddress.Parse(server_ip_addr), TCP_const.SERVER_PORT);
-                    clientStream = TCP_Client.GetStream();
-                    loginWindow.DisplayServerAvailability("Server status: Available");
+                    tcp_client.Connect(IPAddress.Parse(server_ip_addr), TcpConst.SERVER_PORT);
+                    client_stream = tcp_client.GetStream();
+                    login_window.SetServerAvailability("Server status: Available");
                     connected = true;
                 }
 
                 catch (Exception)
                 {
-                    loginWindow.DisplayServerAvailability("Server status: Unavailable ");
+                    login_window.SetServerAvailability("Server status: Unavailable ");
                 }
             }
         }
 
-        public void Client_read()
+        /// <summary>Read messages from the server</summary>
+        public void ClientRead()
         {
+            int numOfBytesRead = 0;
+
             while (true)
             {
                 try
                 {
-                    numOfBytesRead = clientStream.Read(receiveBuffer, 0, TCP_const.BUFFER_SIZE);
+                    numOfBytesRead = client_stream.Read(receive_buffer, 0, TcpConst.BUFFER_SIZE);
                 }
                 catch (Exception) { }
+
                 if (numOfBytesRead > 0)
                 {
-                    TCP_message msg = s.Deserialize_msg(receiveBuffer);
+                    TcpMessage msg = s.DeserializeByteArray(receive_buffer);
 
-                    if (msg.type == TCP_const.REPLY)
-                        HandleServerReply(msg);
+                    if (msg.type == TcpConst.REPLY)
+                        HandleServerReplies(msg);
 
                     numOfBytesRead = 0;
                 }
             }
         }
 
-        private void HandleServerReply(TCP_message msg)
+        /// <summary>Depending on the reply that was received, handle it accordingly. </summary>
+        /// <param name="msg">Received message.</param>
+        private void HandleServerReplies(TcpMessage msg)
         {
             switch(msg.id)
             {
-                case TCP_const.JOIN:
+                case TcpConst.JOIN:
                     HandleJoinReply(msg);
                     break;
-                case TCP_const.LOGIN:
+                case TcpConst.LOGIN:
 
                     break;
-                case TCP_const.LOGOUT:
+                case TcpConst.LOGOUT:
 
                     break;
-                case TCP_const.GET_USERS:
+                case TcpConst.GET_USERS:
 
                     break;
-                case TCP_const.ADD_FRIEND:
+                case TcpConst.ADD_FRIEND:
 
                     break;
-                case TCP_const.GET_FRIENDS_STATUS:
+                case TcpConst.GET_FRIENDS_STATUS:
 
                     break;
-                case TCP_const.GET_CLIENT_DATA:
+                case TcpConst.GET_CLIENT_DATA:
 
                     break;
-                case TCP_const.SEND_MESSAGE:
+                case TcpConst.SEND_MESSAGE:
 
                     break;
                 default: break;
             }
         }
 
-        private void HandleJoinReply(TCP_message msg)
+        private void HandleJoinReply(TcpMessage msg)
         {
             bool username = msg.GetBoolAttributes().ElementAt(0);
             bool password = msg.GetBoolAttributes().ElementAt(1);
@@ -177,10 +191,10 @@ namespace Async_TCP_client_networking
 
         public void SendJoinRequest(string username, string password, string mailaddress)
         {
-            TCP_message msg_send = new TCP_message();
-            msg_send.id = TCP_const.JOIN;
-            msg_send.type = TCP_const.REQUEST;
-            msg_send.source = TCP_networking.GetIP();
+            TcpMessage msg_send = new TcpMessage();
+            msg_send.id = TcpConst.JOIN;
+            msg_send.type = TcpConst.REQUEST;
+            msg_send.source = TcpNetworking.GetIP();
             msg_send.destination = "SERVER";
 
             msg_send.AddTextAttribute(username);
@@ -190,31 +204,35 @@ namespace Async_TCP_client_networking
             Client_send(msg_send);
         }
 
-        public void InitialCheckOfNetworkStatus()
-        {
-            if(NetworkInterface.GetIsNetworkAvailable())
-                loginWindow.DisplayNetworkAvailability("Network status: Available");
-            else
-                loginWindow.DisplayNetworkAvailability("Network status: Unavailable");
-        }
-
-        public void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
-        {
-            if (e.IsAvailable)
-                loginWindow.DisplayNetworkAvailability("Network status: Available");
-            else
-                loginWindow.DisplayNetworkAvailability("Network status: Unavailable");
-        }
-
-        private string SetServerIP()
+        internal void SendLoginRequest()
         {
             throw new NotImplementedException();
         }
 
-        public void Client_send(TCP_message msg)
+        /// <summary>Checks the current status of the network and then sets the network status text accordingly.</summary>
+        public void SetInitialNetworkStatus()
+        {
+            if(NetworkInterface.GetIsNetworkAvailable())
+                login_window.DisplayNetworkAvailability("Network status: Available");
+            else
+                login_window.DisplayNetworkAvailability("Network status: Unavailable");
+        }
+
+        /// <summary>When Network availability changes, this method is invoked.</summary>
+        public void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        {
+            if (e.IsAvailable)
+                login_window.DisplayNetworkAvailability("Network status: Available");
+            else
+                login_window.DisplayNetworkAvailability("Network status: Unavailable");
+        }
+
+        /// <summary>Send message from client to server over TCP.</summary>
+        /// <param name="msg">Message to be sent over TCP.</param>
+        public void Client_send(TcpMessage msg)
         {   
-            byte[] byteBuffer = s.Serialize_msg(msg);
-            try { clientStream.Write(byteBuffer, 0, byteBuffer.Length); }
+            byte[] byteBuffer = s.SerializeMsg(msg);
+            try { client_stream.Write(byteBuffer, 0, byteBuffer.Length); }
             catch (Exception) { }
         }
 
@@ -226,23 +244,36 @@ namespace Async_TCP_client_networking
 
         public void ClientStop()
         {
-            serverConnect.Abort();
-            readMessages.Abort();
+            server_connect.Abort();
+            message_read.Abort();
+        }
+
+        public void ClientStart()
+        {
+            server_connect = new Thread(ConnectToServer);
+            server_connect.Start();
+
+            message_read = new Thread(ClientRead);
+            message_read.Start();
         }
 
         public void ShowLoginWindow()
         {
-            loginWindow.Show();
+            login_window.Show();
         }
 
         public void ShowAddUserWindow()
         {
-            addUserWindow.ShowDialog();
+            add_user_window.ShowDialog();
         }
 
         public void ShowOnlineUserWindow()
         {
-            throw new NotImplementedException();
+            online_window.Show();
         }
+
+        /// <summary>Get the IP address of this machine.</summary>
+        /// <returns></returns>
+        public string GetClientIP() { return TcpNetworking.GetIP(); }
     }
 }

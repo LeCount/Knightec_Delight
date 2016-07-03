@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server.cs" />
-    <Compile Include="ServerDatabase.cs" />
+    <Compile Include="SQLiteServerDatabase.cs" />
     <Compile Include="ServerWindow.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -9,37 +9,33 @@ using System.Linq;
 using SharedResources;
 using System.Data;
 using System.Net.Mail;
-using System.Windows.Forms;
 
 namespace Async_TCP_server_networking
 {
+    /// <summary> A class responsible for asynchronous TCP communication on the server side. </summary>
     public class Server
     {
+        /// <summary>A thread meant to listen client connect requests </summary>
         private Thread connect_listener = null;
+        private TcpListener tcp_client_listener = null;
         private List<Thread> all_active_client_threads = new List<Thread>();
-
-        private TcpListener TCP_listener = null;
-
-        private ServerWindow serverWindow = null;
-        private ServerDatabase db = new ServerDatabase(TCP_const.DATABASE_FILE);
-
-        Serializer server_serializer = new Serializer();
-
         private List<Socket> all_active_client_sockets = new List<Socket>();
+        private ServerWindow serverWindow = null;
+        private SQLiteServerDatabase db = new SQLiteServerDatabase(TcpConst.DATABASE_FILE);
+        private Serializer server_serializer = new Serializer();
 
-        public Server()
-        {
-            init();
-        }
+        public Server(){ Init();}
 
-        private void init()
+        /// <summary> Initialize the server, and start necessary threads. </summary>
+        private void Init()
         {
             serverWindow = ServerWindow.getForm(this);
-            DisplayInitialNetworkStatusInLog();
+
+            SetInitialNetworkStatusInLog();
 
             serverWindow.Text = "Server           " +
-                                "#IP Address: " + TCP_networking.GetIP() + "           " +
-                                "#Port: " + TCP_const.SERVER_PORT + "           " + 
+                                "#IP Address: " + TcpNetworking.GetIP() + "           " +
+                                "#Port: " + TcpConst.SERVER_PORT + "           " + 
                                 "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
@@ -47,19 +43,21 @@ namespace Async_TCP_server_networking
             serverWindow.ShowDialog();
         }
 
+        /// <summary>Start listen for connect request and messages from clients </summary>
         public void ServerStart()
         {
-            TCP_listener = new TcpListener(IPAddress.Parse(TCP_networking.GetIP()), TCP_const.SERVER_PORT);
-            TCP_listener.Start();
+            tcp_client_listener = new TcpListener(IPAddress.Parse(TcpNetworking.GetIP()), TcpConst.SERVER_PORT);
+            tcp_client_listener.Start();
 
             connect_listener = new Thread(ListenForConnectRequest);
             connect_listener.Start();
         }
 
+        /// <summary>Stop all listeners, stop all threads and close all active sockets</summary>
         public void ServerStop()
         {
             connect_listener.Abort();
-            TCP_listener.Stop();
+            tcp_client_listener.Stop();
 
             foreach(Thread curr in all_active_client_threads)
             {
@@ -72,13 +70,17 @@ namespace Async_TCP_server_networking
             }
         }
 
-        public void Server_send(TCP_message msg, Socket s)
+        /// <summary>Send message to specific socket.</summary>
+        /// <param name="msg">Message to send.</param>
+        /// <param name="s">Socket to send msg to.</param>
+        public void ServerSend(TcpMessage msg, Socket s)
         {
-            byte[] byteBuffer = server_serializer.Serialize_msg(msg);
-            s.Send(byteBuffer);
+            byte[] byte_buffer = server_serializer.SerializeMsg(msg);
+            s.Send(byte_buffer);
         }
 
-        public void DisplayInitialNetworkStatusInLog()
+        /// <summary>Checks the current status of the network and then sets the network status text accordingly.</summary>
+        public void SetInitialNetworkStatusInLog()
         {
             if (NetworkInterface.GetIsNetworkAvailable())
                 serverWindow.AddServerLog("Network available");
@@ -86,6 +88,7 @@ namespace Async_TCP_server_networking
                 serverWindow.AddServerLog("Network unavailable");
         }
 
+        /// <summary>This method is invoked when the network status is changed.</summary>
         private void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
         {
             if (e.IsAvailable)
@@ -94,11 +97,13 @@ namespace Async_TCP_server_networking
                 serverWindow.AddServerLog("Network unavailable");
         }
 
+        /// <summary>Get date and time for when server started.</summary>
         private string GetServerUpTimeStart()
         {
             return DateTime.Now.ToString("yyyy-MM-dd, HH.mm.ss");
         }
 
+        /// <summary>Wait for clients to connect. When connected, give clients a thread for the server to listen on and then add clients to the socket list.</summary>
         private void ListenForConnectRequest()
         {
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -106,15 +111,16 @@ namespace Async_TCP_server_networking
 
             while (true)
             {
-                while (!TCP_listener.Pending()) { }     
-                s = TCP_listener.AcceptSocket();
+                while (!tcp_client_listener.Pending()) { }     
+                s = tcp_client_listener.AcceptSocket();
                 all_active_client_sockets.Add(s);
                 serverWindow.AddServerLog("New client has established connection with server.");
                 ListenOnSocket(s);
-
             }
         }
 
+        /// <summary>This method is executed in it's own thread, where it listens for coms. on the addressed socket.</summary>
+        /// <param name="s">Socket to listen on</param>
         private void ListenOnSocket(Socket s)
         {
             Thread new_socket_listener = new Thread(ListenForRequests);
@@ -127,12 +133,14 @@ namespace Async_TCP_server_networking
             all_active_client_threads.Add(new_socket_listener);
         }
 
+        /// <summary>Listens for requests on the addressed socket.</summary>
+        /// <param name="s">Socket to listen on</param>
         private void ListenForRequests(object client_socket)
         {
-            List<TCP_message> request_list = new List<TCP_message>();
+            List<TcpMessage> request_list = new List<TcpMessage>();
             Socket s = (Socket)client_socket; 
-            int numOfBytesRead = 0;
-            byte[] receiveBuffer = new byte[TCP_const.BUFFER_SIZE];
+            int num_of_bytes_read = 0;
+            byte[] receive_buffer = new byte[TcpConst.BUFFER_SIZE];
             
             while (true)
             {
@@ -140,52 +148,58 @@ namespace Async_TCP_server_networking
                 {
                     try
                     {
-                        numOfBytesRead = s.Receive(receiveBuffer);
+                        num_of_bytes_read = s.Receive(receive_buffer);
                     }
                     catch (Exception) { }
 
-                    if (numOfBytesRead > 0)
+                    if (num_of_bytes_read > 0)
                     {
-                        TCP_message msg = server_serializer.Deserialize_msg(receiveBuffer);
+                        TcpMessage msg = server_serializer.DeserializeByteArray(receive_buffer);
                         serverWindow.AddServerLog("Request received from: " + msg.source);
 
                         request_list.Add(msg);
 
-                        string request_as_text = string.Format("{0} REQUEST from: '{1}' to: '{2}'", TCP_const.IntToText(msg.id), msg.source, msg.destination);
-                        serverWindow.DisplayRequestInListbox(request_as_text);
+                        string request_as_text = string.Format("{0} REQUEST from: '{1}' to: '{2}'", TcpConst.IntToText(msg.id), msg.source, msg.destination);
+                        serverWindow.AddServerRequest(request_as_text);
                     }
 
-                    if ((request_list != null || request_list.Count > 0) && (MessageWasMeantForServer(request_list.ElementAt(0))))
+                    if (request_list != null && request_list.Count >= 1 && MessageWasMeantForServer( request_list.ElementAt(0) ) ) 
                     {
                         HandleClientRequest(request_list.ElementAt(0), s);
                         request_list.RemoveAt(0);
                     }
 
-                    numOfBytesRead = 0;
+                    num_of_bytes_read = 0;
                 }
                 else
                     s.Close();
             }
         }
 
-        private bool MessageWasMeantForServer(TCP_message msg)
+        /// <summary>Check if message was a request and that the message was not invalid.</summary>
+        /// <param name="msg">Regarding message</param>
+        /// <returns>True, if msg was meant for server.</returns>
+        private bool MessageWasMeantForServer(TcpMessage msg)
         {
-            if (msg.type == TCP_const.REQUEST && msg.id != TCP_const.INVALID)
+            if (msg.type == TcpConst.REQUEST && msg.id != TcpConst.INVALID)
                 return true;
             else
                 return false;
         }
 
-        private void HandleClientRequest(TCP_message msg, Socket s)
+        /// <summary>Depending on the message's type, handle it accordingly.</summary>
+        /// <param name="msg">Regarding message</param>
+        /// <param name="s">Regarding socket</param>
+        private void HandleClientRequest(TcpMessage msg, Socket s)
         {
             switch(msg.id)
             {
-                case TCP_const.JOIN:
+                case TcpConst.JOIN:
 
                     HandleJoinRequest(msg, s);
 
                     break;
-                case TCP_const.LOGIN:
+                case TcpConst.LOGIN:
 
                     //Username exists?
                     //IP address confirmed?
@@ -197,29 +211,29 @@ namespace Async_TCP_server_networking
                     //Broadcast event to all other users online.
 
                     break;
-                case TCP_const.LOGOUT:
+                case TcpConst.LOGOUT:
 
                     //Acknowledge client.
                     //Close client socket.
                     //Broadcast event to all other users online.
 
                     break;
-                case TCP_const.GET_USERS:
+                case TcpConst.GET_USERS:
 
                     //Send list of all usernames to client.
 
                     break;
-                case TCP_const.ADD_FRIEND:
+                case TcpConst.ADD_FRIEND:
 
                     //Forward request to the requested client.
 
                     break;
-                case TCP_const.GET_FRIENDS_STATUS:
+                case TcpConst.GET_FRIENDS_STATUS:
 
                     //Send friend list to client, marked whether they are online or not.
 
                     break;
-                case TCP_const.GET_CLIENT_DATA:
+                case TcpConst.GET_CLIENT_DATA:
 
                     //If requested data is marked 'Public', send data to client.
                     //Else if marked private, check database if clients are friends.
@@ -227,13 +241,13 @@ namespace Async_TCP_server_networking
                         //Else deny client access.
 
                     break;
-                case TCP_const.SEND_MESSAGE:
+                case TcpConst.SEND_MESSAGE:
 
                     //Check database if clients are friends.
                     //If so, forward message to the requested client.
 
                     break;
-                case TCP_const.INVALID:
+                case TcpConst.INVALID:
 
                     //Ignore this message.
 
@@ -241,22 +255,22 @@ namespace Async_TCP_server_networking
             }
         }
 
-        public void HandleJoinRequest(TCP_message msg, Socket s)
+        public void HandleJoinRequest(TcpMessage msg, Socket s)
         {
             //Check username, password, and email. 
             //Notyfy client if correction is needed, or acknowledge client if all is good, and request client to log in again.
 
             bool validJoinRequest = true; 
 
-            TCP_message reply = new TCP_message();
-            reply.id = TCP_const.JOIN;
-            reply.type = TCP_const.REPLY;
+            TcpMessage reply = new TcpMessage();
+            reply.id = TcpConst.JOIN;
+            reply.type = TcpConst.REPLY;
             reply.source = "SERVER";
             reply.destination = msg.source;
 
-            string suggested_username = (msg.textAttributes.ElementAt(0));
-            string suggested_password = (msg.textAttributes.ElementAt(1));
-            string suggested_email =    (msg.textAttributes.ElementAt(2));
+            string suggested_username = (msg.text_attributes.ElementAt(0));
+            string suggested_password = (msg.text_attributes.ElementAt(1));
+            string suggested_email =    (msg.text_attributes.ElementAt(2));
 
             reply.AddTextAttribute(suggested_username);
             reply.AddTextAttribute(suggested_password);
@@ -291,23 +305,27 @@ namespace Async_TCP_server_networking
             if (validJoinRequest == true)
             {
                 string code = null;
-                code = GeneratConfirmationCode();
-                SendEmailTo(suggested_email, code);
+                code = GenerateConfirmationCode();
+                SendEmailTo(suggested_email, "Login and give this code: " + code, "Account verification");
                 db.AddNewUser(suggested_username, suggested_password, suggested_email, code);
                 
             }
 
-            Server_send(reply, s);
+            ServerSend(reply, s);
         }
 
-        private void SendEmailTo(string suggested_email, string code)
+        /// <summary>Sends an email from my google account to the specified mailaddress.</summary>
+        /// <param name="suggested_email"></param>
+        /// <param name="text"></param>
+        /// /// <param name="subject"></param>
+        private void SendEmailTo(string suggested_email, string text, string subject)
         {
             MailMessage msg = new MailMessage();
 
             msg.From = new MailAddress("server.test@gmail.com", "TORSK");
             msg.To.Add("stefan.danielsson.1989@gmail.com");
             msg.Subject = "Email verfication";
-            msg.Body = code;
+            msg.Body = text;
             //msg.Priority = MailPriority.High;
 
 
@@ -324,7 +342,9 @@ namespace Async_TCP_server_networking
             }
         }
 
-    private string GeneratConfirmationCode()
+        /// <summary>Generate a confirmation code, to be used to verify account and validate IP addresses.</summary>
+        /// <returns></returns>
+        private string GenerateConfirmationCode()
         {
             Random random = new Random();
             int length = 10;
@@ -333,12 +353,18 @@ namespace Async_TCP_server_networking
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        /// <summary>Check if suggested username is unique.</summary>
+        /// <param name="suggested_username"></param>
+        /// <returns></returns>
         private bool UsernameIsUnique(string suggested_username)
         {
             return db.EntryExistsInTable(suggested_username, "Clients", "username");
             
         }
 
+        /// <summary>Check password format.</summary>
+        /// <param name="suggested_password"></param>
+        /// <returns></returns>
         private bool PasswordFormatIsValid(string suggested_password)
         {
             int MIN_LENGTH = 5;
@@ -369,6 +395,9 @@ namespace Async_TCP_server_networking
                 return false;
         }
 
+        /// <summary>Check mail address format.</summary>
+        /// <param name="suggested_password"></param>
+        /// <returns></returns>
         private bool EmailIsValid(string suggested_email)
         {
             try
