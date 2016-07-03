@@ -49,7 +49,7 @@ namespace Async_TCP_server_networking
 
             if(!VerifySmtpClient(smtp_client_mail))
             {
-                MessageBox.Show("SMPT client autentication failed. Please try again.");
+                MessageBox.Show("SMPT client autentication failed.");
                 System.Environment.Exit(0);
             }
 

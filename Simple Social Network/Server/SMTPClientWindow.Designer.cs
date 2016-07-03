@@ -57,7 +57,7 @@
             // 
             this.textBox_mail.Location = new System.Drawing.Point(15, 25);
             this.textBox_mail.Name = "textBox_mail";
-            this.textBox_mail.Size = new System.Drawing.Size(158, 20);
+            this.textBox_mail.Size = new System.Drawing.Size(205, 20);
             this.textBox_mail.TabIndex = 2;
             // 
             // textBox_password
@@ -65,24 +65,24 @@
             this.textBox_password.Location = new System.Drawing.Point(15, 64);
             this.textBox_password.Name = "textBox_password";
             this.textBox_password.PasswordChar = '*';
-            this.textBox_password.Size = new System.Drawing.Size(158, 20);
+            this.textBox_password.Size = new System.Drawing.Size(205, 20);
             this.textBox_password.TabIndex = 3;
             // 
             // btn_confirm
             // 
             this.btn_confirm.Location = new System.Drawing.Point(15, 112);
             this.btn_confirm.Name = "btn_confirm";
-            this.btn_confirm.Size = new System.Drawing.Size(160, 29);
+            this.btn_confirm.Size = new System.Drawing.Size(205, 29);
             this.btn_confirm.TabIndex = 4;
             this.btn_confirm.Text = "Confirm";
             this.btn_confirm.UseVisualStyleBackColor = true;
             this.btn_confirm.Click += new System.EventHandler(this.btn_confirm_Click);
             // 
-            // SMTPClient
+            // SMTPClientWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 160);
+            this.ClientSize = new System.Drawing.Size(232, 160);
             this.Controls.Add(this.btn_confirm);
             this.Controls.Add(this.textBox_password);
             this.Controls.Add(this.textBox_mail);
@@ -90,8 +90,9 @@
             this.Controls.Add(this.label1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "SMTPClient";
-            this.Text = "Set up SMTP client";
+            this.Name = "SMTPClientWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Set up SMTP client on server";
             this.ResumeLayout(false);
             this.PerformLayout();
 
