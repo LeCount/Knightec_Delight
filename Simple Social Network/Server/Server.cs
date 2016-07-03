@@ -9,6 +9,7 @@ using System.Linq;
 using SharedResources;
 using System.Data;
 using System.Net.Mail;
+using System.Windows.Forms;
 
 namespace Async_TCP_server_networking
 {
@@ -23,6 +24,10 @@ namespace Async_TCP_server_networking
         private ServerWindow serverWindow = null;
         private SQLiteServerDatabase db = new SQLiteServerDatabase(TcpConst.DATABASE_FILE);
         private Serializer server_serializer = new Serializer();
+        protected SmtpClient smtp_client = null;
+
+        string smtp_client_mail = null;
+        string smtp_client_password = null;
 
         public Server(){ Init();}
 
@@ -39,6 +44,15 @@ namespace Async_TCP_server_networking
                                 "#Online since: " + GetServerUpTimeStart();
 
             NetworkChange.NetworkAvailabilityChanged += new NetworkAvailabilityChangedEventHandler(OnNetworkAvailabilityChanged);
+
+            new SMTPClientWindow(this).ShowDialog();
+
+            if(!VerifySmtpClient(smtp_client_mail))
+            {
+                MessageBox.Show("SMPT client autentication failed. Please try again.");
+                System.Environment.Exit(0);
+            }
+
             ServerStart();
             serverWindow.ShowDialog();
         }
@@ -322,24 +336,48 @@ namespace Async_TCP_server_networking
         {
             MailMessage msg = new MailMessage();
 
-            msg.From = new MailAddress("server.test@gmail.com", "TORSK");
-            msg.To.Add("stefan.danielsson.1989@gmail.com");
-            msg.Subject = "Email verfication";
+            msg.From = new MailAddress("server.test@gmail.com", "Server Verification");
+            msg.To.Add(suggested_email);
+            msg.Subject = subject;
             msg.Body = text;
             //msg.Priority = MailPriority.High;
 
+            smtp_client.Send(msg);
+            
+        }
 
-            using (SmtpClient client = new SmtpClient())
+        public bool VerifySmtpClient(string suggested_email)
+        {
+            try
             {
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("stefan.danielsson.1989@gmail.com", "klantarselE89");
-                client.Host = "smtp.gmail.com";
-                client.Port = 587;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                MailMessage msg = new MailMessage();
 
-                client.Send(msg);
+                msg.From = new MailAddress("server.test@gmail.com", "Verification of SMTP client");
+                msg.To.Add(suggested_email);
+                msg.Subject = "";
+                msg.Body = "";
+
+                smtp_client.Send(msg);
+                return true;
             }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        public void SetupSmtpClientOverGoogle(string mail, string password)
+        {
+            SmtpClient client = new SmtpClient();
+
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(mail, password);
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            smtp_client = client;
         }
 
         /// <summary>Generate a confirmation code, to be used to verify account and validate IP addresses.</summary>
@@ -409,6 +447,16 @@ namespace Async_TCP_server_networking
             {
                 return false;
             }
+        }
+
+        internal void SetSmtpMail(string text)
+        {
+            smtp_client_mail = text;
+        }
+
+        internal void SetSmtpPassword(string text)
+        {
+            smtp_client_password = text;
         }
     }
 }

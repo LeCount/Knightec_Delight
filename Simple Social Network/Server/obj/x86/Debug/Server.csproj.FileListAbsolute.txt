@@ -20,3 +20,4 @@ C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\De
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\SharedResources.pdb
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.pdb
+C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Async_TCP_server_networking.SMTPClientWindow.resources

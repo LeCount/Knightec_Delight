@@ -92,6 +92,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_password.Location = new System.Drawing.Point(73, 32);
             this.textBox_password.Name = "textBox_password";
+            this.textBox_password.PasswordChar = '*';
             this.textBox_password.Size = new System.Drawing.Size(157, 20);
             this.textBox_password.TabIndex = 10;
             this.textBox_password.TextChanged += new System.EventHandler(this.textBox_username_TextChanged);
