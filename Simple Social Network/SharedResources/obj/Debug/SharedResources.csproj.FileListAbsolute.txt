@@ -2,3 +2,7 @@ C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\SharedResources\bin\Debug\SharedResources.pdb
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\SharedResources\obj\Debug\SharedResources.dll
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\SharedResources\obj\Debug\SharedResources.pdb
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\SharedResources\bin\Debug\SharedResources.dll
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\SharedResources\bin\Debug\SharedResources.pdb
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\SharedResources\obj\Debug\SharedResources.dll
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\SharedResources\obj\Debug\SharedResources.pdb

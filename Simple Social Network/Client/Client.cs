@@ -15,7 +15,7 @@ namespace Async_TCP_client_networking
     {
         private LoginWindow login_window = null;
         private AddUserWindow add_user_window = null;
-        private OnlineUserWindow online_window = null;
+        private OnlineUserWindow online_user_window = null;
         private Serializer s = new Serializer();
 
         /// <summary>Thread responsible for connecting to the server.</summary>
@@ -47,7 +47,7 @@ namespace Async_TCP_client_networking
         {
             login_window = LoginWindow.getForm(this);
             add_user_window = AddUserWindow.getForm(this);
-            //online_window = OnlineUserWindow.getForm(this);
+            online_user_window = OnlineUserWindow.getForm(this);
 
             client_ip_addr = GetClientIP(); 
             server_ip_addr = client_ip_addr; //this needs to be changed if a different computer is used!
@@ -63,10 +63,10 @@ namespace Async_TCP_client_networking
 
             login_window.ShowDialog();
             add_user_window.ShowDialog();
-            online_window.ShowDialog();
+            online_user_window.ShowDialog();
 
             add_user_window.Visible = false;
-            online_window.Visible = false;
+            online_user_window.Visible = false;
         }
 
         /// <summary>Try until success to connect to the server.</summary>
@@ -124,7 +124,7 @@ namespace Async_TCP_client_networking
                     HandleJoinReply(msg);
                     break;
                 case TcpConst.LOGIN:
-
+                    HandleLoginReply(msg);
                     break;
                 case TcpConst.LOGOUT:
 
@@ -189,24 +189,35 @@ namespace Async_TCP_client_networking
             MessageBox.Show(info, caption, MessageBoxButtons.OK, i);
         }
 
-        public void SendJoinRequest(string username, string password, string mailaddress)
+        private void HandleLoginReply(TcpMessage msg)
         {
-            TcpMessage msg_send = new TcpMessage();
-            msg_send.id = TcpConst.JOIN;
-            msg_send.type = TcpConst.REQUEST;
-            msg_send.source = TcpNetworking.GetIP();
-            msg_send.destination = "SERVER";
+            bool username = msg.GetBoolAttributes().ElementAt(0);
+            bool password = msg.GetBoolAttributes().ElementAt(1);
+            bool code = msg.GetBoolAttributes().ElementAt(2);
 
-            msg_send.AddTextAttribute(username);
-            msg_send.AddTextAttribute(password);
-            msg_send.AddTextAttribute(mailaddress);
+            username = true;
+            password = true;
+            code = true;
 
-            Client_send(msg_send);
+            if (!username && !password && !code)
+            {
+
+            }
+            else
+            {
+                online_user_window.Visible = true;
+                login_window.Visible = false;
+            }
         }
 
-        internal void SendLoginRequest()
+        public void SendJoinRequest(string username, string password, string mailaddress)
         {
-            throw new NotImplementedException();
+            Client_send(new TcpMessage().CreateJoinRequest(username, password, mailaddress));
+        }
+
+        internal void SendLoginRequest(string username, string password, string code)
+        {
+            Client_send(new TcpMessage().CreateLoginRequest(username, password, code));
         }
 
         /// <summary>Checks the current status of the network and then sets the network status text accordingly.</summary>
@@ -269,7 +280,7 @@ namespace Async_TCP_client_networking
 
         public void ShowOnlineUserWindow()
         {
-            online_window.Show();
+            online_user_window.Show();
         }
 
         /// <summary>Get the IP address of this machine.</summary>
