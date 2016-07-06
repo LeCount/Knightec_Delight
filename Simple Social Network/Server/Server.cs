@@ -215,14 +215,7 @@ namespace Async_TCP_server_networking
                     break;
                 case TcpConst.LOGIN:
 
-                    //Username exists?
-                    //IP address confirmed?
-                    //Password/code correct?
-                    //If ip was not confirmed, add it to confirmed IP addresses.
-                    //Client online allready?
-                    //Accept login.
-                    //Acknowledge client.
-                    //Broadcast event to all other users online.
+                    HandleLoginRequest(msg, s);
 
                     break;
                 case TcpConst.LOGOUT:
@@ -269,11 +262,24 @@ namespace Async_TCP_server_networking
             }
         }
 
+        private void HandleLoginRequest(TcpMessage msg, Socket s)
+        {
+            if(!UsernameExist(msg.text_attributes.ElementAt(0)))
+
+            //Username exists?
+            //IP address confirmed?
+            //Password/code correct?
+            //If ip was not confirmed, add it to confirmed IP addresses.
+            //Client online allready?
+            //Accept login.
+            //Acknowledge client.
+            //Broadcast event to all other users online.
+
+            ServerSend(null, s);
+        }
+
         public void HandleJoinRequest(TcpMessage msg, Socket s)
         {
-            //Check username, password, and email. 
-            //Notyfy client if correction is needed, or acknowledge client if all is good, and request client to log in again.
-
             bool validJoinRequest = true; 
 
             TcpMessage reply = new TcpMessage();
@@ -290,7 +296,7 @@ namespace Async_TCP_server_networking
             reply.AddTextAttribute(suggested_password);
             reply.AddTextAttribute(suggested_email);
 
-            if (UsernameIsUnique(suggested_username))
+            if (!UsernameExist(suggested_username))
                 reply.AddBoolAttribute(true);
             else
             {
@@ -394,7 +400,7 @@ namespace Async_TCP_server_networking
         /// <summary>Check if suggested username is unique.</summary>
         /// <param name="suggested_username"></param>
         /// <returns></returns>
-        private bool UsernameIsUnique(string suggested_username)
+        private bool UsernameExist(string suggested_username)
         {
             return db.EntryExistsInTable(suggested_username, "Clients", "username");
             

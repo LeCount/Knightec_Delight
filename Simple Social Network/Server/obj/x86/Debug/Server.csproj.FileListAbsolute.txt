@@ -21,6 +21,7 @@ C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\obj\x86\Debug\Server.csproj.GenerateResource.Cache
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\obj\x86\Debug\Server.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Knightec_Delight\Simple Social Network\Server\obj\x86\Debug\Server.pdb
+<<<<<<< HEAD
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.exe.config
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\bin\x86\Debug\Server.pdb
@@ -34,3 +35,18 @@ C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\De
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.csproj.GenerateResource.Cache
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.exe
 C:\Users\Greven\Desktop\Knightec project\Simple Social Network\Server\obj\x86\Debug\Server.pdb
+=======
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\Server.exe.config
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\Server.exe
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\Server.pdb
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\SharedResources.dll
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\System.Data.SQLite.dll
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\bin\x86\Debug\SharedResources.pdb
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Server.Properties.Resources.resources
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Async_TCP_server_networking.ServerWindow.resources
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Async_TCP_server_networking.SMTPClientWindow.resources
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Server.csproj.GenerateResource.Cache
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Server.exe
+C:\Users\Glock\Desktop\Stefan\Knightec\Simple Social Network\Server\obj\x86\Debug\Server.pdb
+>>>>>>> 1aa9c87f7c9ed3853d8f3dee173c134b8ca54da5

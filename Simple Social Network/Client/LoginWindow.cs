@@ -120,8 +120,8 @@ namespace Async_TCP_client_networking
         /// <param name="e">Information regarding this event.</param>
         private void btn_login_Click(object sender, EventArgs e)
         {
-            //verify login on server
-            client_networking.SendLoginRequest();
+            if(textBox_user.Text != null && textBox_password.Text != null)
+                client_networking.SendLoginRequest(textBox_user.Text, textBox_password.Text, textBox_code.Text);
         }
     }
 }
