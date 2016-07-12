@@ -62,9 +62,9 @@ namespace ServerDBCommunication
             int occurrences = Convert.ToInt32(obj);
 
             if (occurrences > 0)
-                return false;
-            else
                 return true;
+            else
+                return false;
         }
 
         //public void AddUser(string uName, string pWord)

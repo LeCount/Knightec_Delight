@@ -36,24 +36,66 @@ namespace SharedResources
             bool_attributes = new List<bool>();
         }
 
-        public List<string> GetTextAttributes()
+        public List<string> GetTextAttributes(){ return text_attributes;}
+
+        public void AddTextAttribute(string str){text_attributes.Add(str);}
+
+        public List<bool> GetBoolAttributes(){return bool_attributes;}
+
+        public void AddBoolAttribute(bool b){bool_attributes.Add(b);}
+
+        public TcpMessage CreateJoinRequest(string username, string password, string mailaddress)
         {
-            return text_attributes;
+            id = TcpConst.JOIN;
+            type = TcpConst.REQUEST;
+            source = TcpNetworking.GetIP();
+            destination = "SERVER";
+            AddTextAttribute(username);
+            AddTextAttribute(password);
+            AddTextAttribute(mailaddress);
+            return this;
         }
 
-        public void AddTextAttribute(string str)
+        public TcpMessage CreateLoginRequest(string username, string password, string code)
         {
-            text_attributes.Add(str);
+            id = TcpConst.LOGIN;
+            type = TcpConst.REQUEST;
+            source = TcpNetworking.GetIP();
+            destination = "SERVER";
+            AddTextAttribute(username);
+            AddTextAttribute(password);
+            AddTextAttribute(code);
+            return this;
         }
 
-        public List<bool> GetBoolAttributes()
+        public TcpMessage CreateDisconnectRequest()
         {
-            return bool_attributes;
+            TcpMessage msg = new TcpMessage();
+            return msg;
         }
 
-        public void AddBoolAttribute(bool b)
+        public TcpMessage CreateGetUsersRequest()
         {
-            bool_attributes.Add(b);
+            TcpMessage msg = new TcpMessage();
+            return msg;
+        }
+
+        public TcpMessage CreateAddFriendRequest()
+        {
+            TcpMessage msg = new TcpMessage();
+            return msg;
+        }
+
+        public TcpMessage CreateGetFriendsStatusRequest()
+        {
+            TcpMessage msg = new TcpMessage();
+            return msg;
+        }
+
+        public TcpMessage CreateGetClientDataRequest()
+        {
+            TcpMessage msg = new TcpMessage();
+            return msg;
         }
     }
 }
